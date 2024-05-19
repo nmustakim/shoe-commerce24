@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,17 +12,24 @@ class DiscoverShoes extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             'DISCOVER',
-            style: GoogleFonts.urbanist(),
+
+            style: GoogleFonts.urbanist(
+
+            ).copyWith(fontWeight: FontWeight.w700),
           ),
           centerTitle: false,
           actions: [
-            Image.asset('assets/images/cart.png'),
+            Image.asset('assets/images/cart.png',),
             SizedBox(
-              width: 10,
+              width: 30,
             )
           ],
         ),
-        body: const Column(children: []),
+        body:  Column(children: [
+          Expanded(child: ListView.builder(itemBuilder: (context,index){
+            return Text()
+          }))
+        ]),
       ),
     );
   }
