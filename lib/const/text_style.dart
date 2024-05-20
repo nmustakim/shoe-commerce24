@@ -13,6 +13,9 @@ final buttonTextStyle = GoogleFonts.urbanist(
 final bodyText400Light =
     GoogleFonts.urbanist(fontSize: 12.sp, color: const Color(0XFFB7B7B7));
 
+final bodyText700 = GoogleFonts.urbanist(
+    fontSize: 20.sp, fontWeight: FontWeight.w700);
+
 final headline700 =
     GoogleFonts.urbanist(fontSize: 30.sp, fontWeight: FontWeight.w700);
 

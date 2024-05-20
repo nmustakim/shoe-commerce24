@@ -8,23 +8,9 @@ class ShoesService {
   ShoesService(FirebaseFirestore firestore)
       : _shoesCollection = firestore.collection('shoes');
 
-  Future<void> addShoe(Shoe shoe) async {
-    try {
-      await _shoesCollection.add(shoe.toDocument());
-    } catch (e) {
-      debugPrint('Error adding shoe: $e');
-      rethrow;
-    }
-  }
 
-  Future<void> updateShoe(Shoe shoe) async {
-    try {
-      await _shoesCollection.doc(shoe.id).update(shoe.toDocument());
-    } catch (e) {
-      debugPrint('Error updating shoe: $e');
-      rethrow;
-    }
-  }
+
+
 
   Future<void> deleteShoe(String id) async {
     try {

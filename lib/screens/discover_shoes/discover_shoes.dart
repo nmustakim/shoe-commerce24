@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/text_style.dart';
 import 'package:shoe_commerce/screens/discover_shoes/widgets/shoe_card.dart';
+import 'package:shoe_commerce/screens/product_details/priduct_details_screen.dart';
+import '../../model/shoe.dart';
 import '../../provider/shoes_provider.dart';
 
 class DiscoverShoes extends StatefulWidget {
@@ -53,7 +55,7 @@ class _DiscoverShoesState extends State<DiscoverShoes> {
       ),
       body: Consumer<ShoesProvider>(
         builder: (context, shoesProvider, child) => Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.0.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -94,7 +96,9 @@ class _DiscoverShoesState extends State<DiscoverShoes> {
                   ),
                   itemCount: shoesProvider.shoes.length,
                   itemBuilder: (context, index) {
+                    final Shoe shoe = shoesProvider.shoes[index];
                     return ShoeCard(
+                      onTap:()=> Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsScreen(shoe: shoe))),
                       shoe: shoesProvider.shoes[index],
                     );
                   },
