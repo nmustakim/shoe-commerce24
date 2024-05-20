@@ -6,7 +6,7 @@ import '../services/shoe_service.dart';
 class ShoesProvider extends ChangeNotifier {
   final ShoesService _shoesService;
   List<Shoe> _shoes = [];
-  List<String> categories = ["All","Nike","Rebook","Adidas"];
+  List<String> categories = ["All","Nike","Jordan","Adidas","Reebok",];
   bool _isLoading = false;
   String? _error;
 
