@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/provider/shoes_provider.dart';
 import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
-import 'package:shoe_commerce/screens/product_details/priduct_details_screen.dart';
 import 'package:shoe_commerce/services/shoe_service.dart';
 
 import 'firebase_options.dart';
@@ -26,11 +25,11 @@ class ShoeCommerce extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: const Size(360,690),
+        designSize: const Size(375,812),
         minTextAdapt: true,
 
         builder: (_, child) {
-          return MaterialApp(
+          return const MaterialApp(
             debugShowCheckedModeBanner: false,
             home: DiscoverShoes(),
           );

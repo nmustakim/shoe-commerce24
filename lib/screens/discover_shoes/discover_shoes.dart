@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +5,7 @@ import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/text_style.dart';
 import 'package:shoe_commerce/global_widgets/kappbar.dart';
 import 'package:shoe_commerce/screens/discover_shoes/widgets/shoe_card.dart';
+import 'package:shoe_commerce/screens/filter_screen.dart';
 import 'package:shoe_commerce/screens/product_details/priduct_details_screen.dart';
 import '../../model/shoe.dart';
 import '../../provider/shoes_provider.dart';
@@ -45,7 +45,12 @@ class _DiscoverShoesState extends State<DiscoverShoes> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: Colors.white,
-      appBar: KAppBar(isDiscoverScreen: true,hasTrailing: true, onTap: (){}),
+      appBar: KAppBar(
+          isDiscoverScreen: true,
+          hasTitle: true,
+          title: 'Discover',
+          hasTrailing: true,
+          onTap: () {}),
       body: Consumer<ShoesProvider>(
         builder: (context, shoesProvider, child) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0.w),
@@ -85,49 +90,53 @@ class _DiscoverShoesState extends State<DiscoverShoes> {
                   controller: _scrollController,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 0.66,
+                    childAspectRatio: 0.7111111111,
                   ),
                   itemCount: shoesProvider.shoes.length,
                   itemBuilder: (context, index) {
                     final Shoe shoe = shoesProvider.shoes[index];
                     return ShoeCard(
-                      onTap:()=> Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsScreen(shoe: shoe))),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductDetailsScreen(shoe: shoe))),
                       shoe: shoesProvider.shoes[index],
                     );
                   },
                 ),
               ),
               if (shoesProvider.isLoading)
-                Center(child: CircularProgressIndicator()),
+                const Center(child: CircularProgressIndicator()),
             ],
           ),
         ),
-      ),      floatingActionButton: InkWell(
-      onTap: () {},
-      child: Container(
-        height: 40.h,
-        width: 119.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100.r),
-          color: buttonBackground,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/filter_icon.png'),
-            SizedBox(width: 8.w),
-            Text(
-              'FILTER',
-              style: buttonTextStyle,
-            ),
-          ],
-        ),
       ),
+      floatingActionButton: InkWell(
+        onTap: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const FilterScreen())),
+        child: Container(
+           height: 40.h,
+          width: 119.w,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100.r),
+            color: buttonBackground,
+          ),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/images/filter_icon.png'),
+                SizedBox(width: 8.w),
+                Text(
+                  'FILTER',
+                  style: buttonTextStyle,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 }
-
-
-
-

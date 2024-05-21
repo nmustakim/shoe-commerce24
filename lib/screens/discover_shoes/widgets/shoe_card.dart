@@ -18,12 +18,12 @@ class ShoeCard extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: 135.h,
-            width: 155.w,
+            height: 160.h,
+            width: 160.w,
             child: Stack(
               children: [
                 Card(
-                  color: secondaryBackground,
+                  color: secondaryBackground1,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(22.r),
                   ),

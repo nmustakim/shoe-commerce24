@@ -7,22 +7,25 @@ class KButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color? backgroundColor;
   final Color? foregroundColor;
+  final double height;
+  final double width;
+  final bool? hasLeading;
 
   const KButton({
     super.key,
     required this.text,
-    required this.onPressed, this.backgroundColor, this.foregroundColor,
+    required this.onPressed, this.backgroundColor, this.foregroundColor, required this.height, required this.width, this.hasLeading,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40.h,
+      height:height ,
+      width: width,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 20.h),
-          backgroundColor: backgroundColor??Colors.black,
+           backgroundColor: backgroundColor??Colors.black,
           foregroundColor: foregroundColor??Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100.r),

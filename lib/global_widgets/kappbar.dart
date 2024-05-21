@@ -6,25 +6,29 @@ import '../const/text_style.dart';
 class KAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onTap;
   final bool hasTrailing;
-  final bool isDiscoverScreen;
+  final bool? hasTitle;
+  final String? title;
+
+  final bool? isDiscoverScreen;
   const KAppBar(
       {super.key,
       this.hasTrailing = false,
-      required this.isDiscoverScreen,
-      required this.onTap});
+       this.isDiscoverScreen,
+      required this.onTap,  this.hasTitle, this.title});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: 80.h,
-      title: isDiscoverScreen ? Text('Discover', style: headline700) : null,
+      centerTitle: isDiscoverScreen == true?false:true,
+      title: hasTitle==true ? Text(title!, style: isDiscoverScreen==true?headline700:headline600small) : null,
       actions: [
         if (hasTrailing)
           Container(
               margin: EdgeInsets.only(right: 16.w),
               child: InkWell(
                   onTap: onTap,
-                  child: Image.asset(isDiscoverScreen
+                  child: Image.asset(isDiscoverScreen==true
                       ? 'assets/images/cart.png'
                       : 'assets/images/bag-2.png'))),
       ],

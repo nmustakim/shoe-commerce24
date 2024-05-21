@@ -24,7 +24,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: KAppBar(isDiscoverScreen: false, hasTrailing: true, onTap: () {}),
+      appBar: KAppBar(hasTrailing: true, onTap: () {}),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0.w),
@@ -40,8 +40,10 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
               _buildDescription(),
               SizedBox(height: 20.h),
               _buildReviews(widget.shoe),
+              _buildAllReviewButton(onPressed: () {}),
               SizedBox(height: 20.h),
               _buildAddToCartSection(widget.shoe),
+              SizedBox(height: 16.h),
             ],
           ),
         ),
@@ -55,7 +57,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
         Container(
           height: 315.h,
           decoration: BoxDecoration(
-              color: secondaryBackground,
+              color: secondaryBackground1,
               borderRadius: BorderRadius.circular(20.r)),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -75,9 +77,27 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
         ),
         Positioned(
-            right: 8.w,
-            bottom: 8.h,
-            child: _buildColorSelection(widget.shoe.colors)),
+          left: 20.w,
+          bottom: 20.h,
+          child: Row(
+            children: [
+              _buildDot(buttonBackground),
+              SizedBox(
+                width: 4.w,
+              ),
+              _buildDot(secondaryBackground2),
+              SizedBox(
+                width: 4.w,
+              ),
+              _buildDot(secondaryBackground2),
+            ],
+          ),
+        ),
+        Positioned(
+          right: 8.w,
+          bottom: 8.h,
+          child: _buildColorSelection(widget.shoe.colors),
+        ),
       ],
     );
   }
@@ -86,7 +106,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(shoe.name, style: bodyText700),
+        Text(shoe.name, style: bodyText700Big),
         SizedBox(height: 10.h),
         Row(
           children: [
@@ -99,7 +119,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
             SizedBox(width: 5.w),
             Text(
               '(${shoe.reviewCount} Reviews)',
-              style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+              style: headline600small,
             ),
           ],
         ),
@@ -154,11 +174,19 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
+  Widget _buildDot(Color color) {
+    return Container(
+      height: 7.h,
+      width: 7.h,
+      decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+    );
+  }
+
   Widget _buildSizeSelection(List<double> sizes) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Size', style: bodyText700),
+        Text('Size', style: headline600small),
         SizedBox(height: 10.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -179,13 +207,10 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     color: isSelected ? Colors.transparent : buttonBackground,
                   ),
                 ),
-                child: Text(
-                  sizes[index].toString(),
-                  style: TextStyle(
-                    color: isSelected ? buttonForeground : buttonBackground,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child: Text(sizes[index].toString(),
+                    style: bodyText700SmallLight.copyWith(
+                        color:
+                            isSelected ? buttonForeground : buttonBackground)),
               ),
             );
           }),
@@ -198,11 +223,12 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Description', style: bodyText700),
+        Text('Description', style: headline600small),
         SizedBox(height: 10.h),
         Text(
           widget.shoe.description,
           overflow: TextOverflow.ellipsis,
+          style: bodyText400LightMedium,
         ),
       ],
     );
@@ -212,7 +238,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Reviews (${shoe.reviews.length})', style: bodyText700),
+        Text('Reviews (${shoe.reviews.length})', style: headline600small),
         SizedBox(height: 10.h),
         ...shoe.reviews.map((review) {
           return Column(
@@ -258,13 +284,31 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Price', style: bodyText700),
-            Text('\$${shoe.price}',
-                style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold)),
+            Text('Price', style: bodyText400Light),
+            Text('\$${shoe.price}', style: bodyText700Big),
           ],
         ),
-        KButton(text: 'ADD TO CART', onPressed: () {})
+        KButton(height: 50.h,width: 156.w,
+            text: 'ADD TO CART',onPressed: () {})
       ],
+    );
+  }
+
+  Widget _buildAllReviewButton({required VoidCallback onPressed}) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+            foregroundColor: buttonBackground,
+            shape: RoundedRectangleBorder(
+                side: BorderSide(color: secondaryBackground1),
+                borderRadius: BorderRadius.circular(100.r))),
+        onPressed: onPressed,
+        child: Text(
+          'SEE ALL REVIEW',
+          style: bodyText700Small,
+        ),
+      ),
     );
   }
 }
