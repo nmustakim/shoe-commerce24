@@ -18,7 +18,7 @@ class ShoeCard extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: 145.h,
+            height: 135.h,
             width: 155.w,
             child: Stack(
               children: [
@@ -30,8 +30,8 @@ class ShoeCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                        margin: EdgeInsets.only(bottom: 16.h),
-                        child: Image.network(shoe.image)),
+                        margin: EdgeInsets.only(bottom: 8.h),
+                        child: Image.network(shoe.images.first,width: 120.w,fit: BoxFit.fitWidth, )),
                   ),
                 ),
                 Container(

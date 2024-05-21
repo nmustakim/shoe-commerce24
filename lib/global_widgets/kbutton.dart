@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shoe_commerce/const/text_style.dart';
 
-class CustomButton extends StatelessWidget {
+class KButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final Color? backgroundColor;
   final Color? foregroundColor;
 
-  const CustomButton({
+  const KButton({
     super.key,
     required this.text,
     required this.onPressed, this.backgroundColor, this.foregroundColor,
@@ -23,6 +23,7 @@ class CustomButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 20.h),
           backgroundColor: backgroundColor??Colors.black,
+          foregroundColor: foregroundColor??Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100.r),
           ),

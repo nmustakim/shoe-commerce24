@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/text_style.dart';
+import 'package:shoe_commerce/global_widgets/kappbar.dart';
 import 'package:shoe_commerce/screens/discover_shoes/widgets/shoe_card.dart';
 import 'package:shoe_commerce/screens/product_details/priduct_details_screen.dart';
 import '../../model/shoe.dart';
@@ -44,15 +45,7 @@ class _DiscoverShoesState extends State<DiscoverShoes> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text('Discover', style: headline700),
-        actions: [
-          Image.asset('assets/images/cart.png'),
-          SizedBox(
-            width: 16.w,
-          ),
-        ],
-      ),
+      appBar: KAppBar(isDiscoverScreen: true,hasTrailing: true, onTap: (){}),
       body: Consumer<ShoesProvider>(
         builder: (context, shoesProvider, child) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0.w),
