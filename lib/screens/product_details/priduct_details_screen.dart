@@ -1,12 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/global_widgets/kappbar.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
+import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
 import 'package:shoe_commerce/screens/product_details/widgets.dart';
+import 'package:shoe_commerce/screens/reviews/review_screen.dart';
 import '../../const/text_style.dart';
 import '../../model/shoe.dart';
+import '../../provider/cart_provider.dart';
+import '../cart/cart_screen.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Shoe shoe;
@@ -20,11 +24,196 @@ class ProductDetailsScreen extends StatefulWidget {
 class ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _selectedColorIndex = 0;
   int _selectedSizeIndex = 0;
+  int _currentPageIndex = 0;
+
+  final PageController _pageController = PageController();
+  int selectedQuantity = 1;
+  void _showAddToCartPopup(BuildContext context) {
+    int selectedQuantity = 1; // Initial quantity
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.fromLTRB(24.w, 34.h, 24.w, 24.h),
+          child: Consumer<CartProvider>(
+            builder: (context, cartProvider, _) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Add to Cart', style: bodyText700Medium),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.close))
+                    ],
+                  ),
+                  SizedBox(height: 24.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Quantity',
+                              style: bodyText700Small,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 60.w,
+                            height: 40.h,
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: TextField(
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.number,
+                                controller: TextEditingController(
+                                    text: selectedQuantity.toString()),
+                                onChanged: (value) {
+                                  if (int.tryParse(value) != null) {
+                                    selectedQuantity = int.parse(value);
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.remove_circle_outline,
+                                color: secondaryBackground2, size: 24.sp),
+                            onPressed: () {
+                              if (selectedQuantity > 1) {
+                                selectedQuantity--;
+                                (context as Element).markNeedsBuild();
+                              }
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.add_circle_outline, size: 24.sp),
+                            onPressed: () {
+                              selectedQuantity++;
+                              (context as Element).markNeedsBuild();
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 24.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Total Price',
+                            style: bodyText400Light,
+                          ),
+                          Text(
+                            '\$${(widget.shoe.price * selectedQuantity).toStringAsFixed(2)}',
+                            style: bodyText700Medium,
+                          ),
+                        ],
+                      ),
+                      KButton(
+                        text: 'ADD TO CART',
+                        onPressed: () {
+                          cartProvider.addToCart(widget.shoe, selectedQuantity);
+                          Navigator.pop(context);
+                          _showAddedToCartPopup(context);
+                        },
+                        height: 52.h,
+                        width: 156.w,
+                      ),
+                    ],
+                  )
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAddedToCartPopup(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+            padding: EdgeInsets.fromLTRB(24.w, 34.h, 24.w, 24.h),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/tick-circle.png'),
+                  SizedBox(height: 24.h,),
+
+                  Text('Added to cart',style: headline600Big,),
+SizedBox(height: 16.h,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      KButton(
+                        text: 'BACK EXPLORE',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const DiscoverShoes()));
+                        },
+                        foregroundColor: buttonBackground,
+                        backgroundColor: buttonForeground,
+                        height: 52.h,
+                        width: 156.w,
+                      ),
+                      KButton(
+                        text: 'TO CART',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ShoppingCartScreen()));
+                        },
+                        height: 52.h,
+                        width: 156.w,
+                      )
+                    ],
+                  )
+            ]
+            )
+        );
+
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<CartProvider>(context);
+
     return Scaffold(
-      appBar: KAppBar(hasTrailing: true, onTap: () {}),
+      appBar: KAppBar(hasTrailing: true, onTrailingTap: () {}),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0.w),
@@ -40,14 +229,25 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
               _buildDescription(),
               SizedBox(height: 20.h),
               _buildReviews(widget.shoe),
-              _buildAllReviewButton(onPressed: () {}),
+              _buildAllReviewButton(onPressed: () {Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                       ReviewScreen(shoe: widget.shoe,)));}),
               SizedBox(height: 20.h),
-              _buildAddToCartSection(widget.shoe),
-              SizedBox(height: 16.h),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: _buildBottomAppBar(),
+    );
+  }
+
+  Widget _buildBottomAppBar() {
+    return BottomAppBar(
+      color: buttonForeground,
+      elevation: 1.0,
+      child: _buildAddToCartSection(widget.shoe),
     );
   }
 
@@ -59,19 +259,19 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
           decoration: BoxDecoration(
               color: secondaryBackground1,
               borderRadius: BorderRadius.circular(20.r)),
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
+          child: PageView.builder(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _currentPageIndex = index;
+              });
+            },
             itemCount: shoe.images.length,
             itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  setState(() {});
-                },
-                child: Image.network(
-                  shoe.images[index],
-                  width: 252.w,
-                  fit: BoxFit.fitWidth,
-                ),
+              return Image.network(
+                shoe.images[index],
+                width: 252.w,
+                fit: BoxFit.fitWidth,
               );
             },
           ),
@@ -80,17 +280,14 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
           left: 20.w,
           bottom: 20.h,
           child: Row(
-            children: [
-              _buildDot(buttonBackground),
-              SizedBox(
-                width: 4.w,
-              ),
-              _buildDot(secondaryBackground2),
-              SizedBox(
-                width: 4.w,
-              ),
-              _buildDot(secondaryBackground2),
-            ],
+            children: List.generate(shoe.images.length, (index) {
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                child: _buildDot(index == _currentPageIndex
+                    ? buttonBackground
+                    : secondaryBackground2),
+              );
+            }),
           ),
         ),
         Positioned(
@@ -106,7 +303,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(shoe.name, style: bodyText700Big),
+        Text(shoe.name, style: bodyText700Medium),
         SizedBox(height: 10.h),
         Row(
           children: [
@@ -156,16 +353,17 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
                 if (_selectedColorIndex == index)
                   Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      top: 0,
-                      child: Image.asset(
-                        'assets/images/check.png',
-                        color: buttonForeground,
-                      ))
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    top: 0,
+                    child: Image.asset(
+                      'assets/images/check.png',
+                      color: buttonForeground,
+                    ),
+                  )
                 else
-                  const SizedBox.shrink()
+                  const SizedBox.shrink(),
               ],
             ),
           );
@@ -204,10 +402,11 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   color: isSelected ? buttonBackground : buttonForeground,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isSelected ? Colors.transparent : buttonBackground,
+                    color: isSelected ? buttonBackground : borderLight,
                   ),
                 ),
-                child: Text(sizes[index].toString(),
+                child: Text(
+                    sizes[index].toStringAsFixed(index % 2 == 0 ? 0 : 1),
                     style: bodyText700SmallLight.copyWith(
                         color:
                             isSelected ? buttonForeground : buttonBackground)),
@@ -278,18 +477,28 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Widget _buildAddToCartSection(Shoe shoe) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Price', style: bodyText400Light),
-            Text('\$${shoe.price}', style: bodyText700Big),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Price', style: bodyText400Light),
+                Text('\$${shoe.price}', style: bodyText700Medium),
+              ],
+            ),
+            KButton(
+              height: 50.h,
+              width: 156.w,
+              text: 'ADD TO CART',
+              onPressed: () => _showAddToCartPopup(context),
+            ),
           ],
         ),
-        KButton(height: 50.h,width: 156.w,
-            text: 'ADD TO CART',onPressed: () {})
       ],
     );
   }
@@ -299,10 +508,12 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
       width: double.infinity,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-            foregroundColor: buttonBackground,
-            shape: RoundedRectangleBorder(
-                side: BorderSide(color: secondaryBackground1),
-                borderRadius: BorderRadius.circular(100.r))),
+          foregroundColor: buttonBackground,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: secondaryBackground1),
+            borderRadius: BorderRadius.circular(100.r),
+          ),
+        ),
         onPressed: onPressed,
         child: Text(
           'SEE ALL REVIEW',

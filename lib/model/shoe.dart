@@ -39,7 +39,7 @@ class Shoe {
       id: doc.id,
       logo: data['logo'] ?? '',
       name: data['title'] ?? '',
-      price: (data['price'] ?? 0.0).toDouble(),
+      price: (data['price'] ?? 0).toDouble(),
       reviewCount: data['review_count'] ?? 0,
       averageRating: (data['avg_rating'] ?? 0.0).toDouble(),
       reviews: reviews,

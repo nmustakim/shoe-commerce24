@@ -11,7 +11,8 @@ class ShoesProvider extends ChangeNotifier {
   String? _error;
   int _selectedIndex = 0;
   bool _isFetchingMore = false;
-  DocumentSnapshot? _lastDocument;
+  DocumentSnapshot? _lastBrandDocument;
+  DocumentSnapshot? _lastShoeDocument;
 
   ShoesProvider(this._shoesService) {
     fetchShoes();
@@ -30,7 +31,8 @@ class ShoesProvider extends ChangeNotifier {
     try {
       final result = await _shoesService.getShoes();
       _shoes = result.shoes;
-      _lastDocument = result.lastDocument;
+      _lastBrandDocument = result.lastBrandDocument;
+      _lastShoeDocument = result.lastShoeDocument;
     } catch (e) {
       _error = 'Error fetching shoes: $e';
     } finally {
@@ -40,15 +42,15 @@ class ShoesProvider extends ChangeNotifier {
   }
 
   Future<void> fetchMoreShoes() async {
-    if (_isFetchingMore || _lastDocument == null) return;
+    if (_isFetchingMore || _lastBrandDocument == null) return;
     _isFetchingMore = true;
     notifyListeners();
 
     try {
-      final result = await _shoesService.getMoreShoes(_lastDocument!);
+      final result = await _shoesService.getMoreShoes(_lastBrandDocument!, _lastShoeDocument!);
       _shoes.addAll(result.shoes);
-      _lastDocument = result.lastDocument;
-
+      _lastBrandDocument = result.lastBrandDocument;
+      _lastShoeDocument = result.lastShoeDocument;
     } catch (e) {
       _error = 'Error fetching more shoes: $e';
     } finally {

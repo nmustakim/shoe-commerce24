@@ -33,7 +33,7 @@ class KButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style:buttonTextStyle
+          style:buttonTextStyle.copyWith(color: foregroundColor)
         ),
       ),
     );

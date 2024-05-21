@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:shoe_commerce/provider/cart_provider.dart';
 import 'package:shoe_commerce/provider/shoes_provider.dart';
 import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
 import 'package:shoe_commerce/services/shoe_service.dart';
@@ -15,9 +16,19 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(ChangeNotifierProvider(
-      create: (BuildContext context) => ShoesProvider(ShoesService(FirebaseFirestore.instance)),
-      child: const ShoeCommerce()));
+  runApp(
+    MultiProvider(
+      providers: [
+      ChangeNotifierProvider(
+          create: (BuildContext context) =>
+              ShoesProvider(ShoesService(FirebaseFirestore.instance))),
+      ChangeNotifierProvider(
+          create: (BuildContext context) =>
+              CartProvider())
+    ],
+      child: const ShoeCommerce()),
+  );
+
 }
 
 class ShoeCommerce extends StatelessWidget {
@@ -25,9 +36,8 @@ class ShoeCommerce extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: const Size(375,812),
+        designSize: const Size(375, 872),
         minTextAdapt: true,
-
         builder: (_, child) {
           return const MaterialApp(
             debugShowCheckedModeBanner: false,

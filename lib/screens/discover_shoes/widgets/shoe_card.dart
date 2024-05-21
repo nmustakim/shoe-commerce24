@@ -67,7 +67,7 @@ class ShoeCard extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: '${shoe.averageRating}',
-                        style: headline700.copyWith(fontSize: 11.sp),
+                        style: headline700Big.copyWith(fontSize: 11.sp),
                       ),
                       TextSpan(
                         text: ' (${shoe.reviewCount} Reviews)',

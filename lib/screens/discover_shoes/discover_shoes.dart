@@ -50,7 +50,7 @@ class _DiscoverShoesState extends State<DiscoverShoes> {
           hasTitle: true,
           title: 'Discover',
           hasTrailing: true,
-          onTap: () {}),
+          onTrailingTap: () {}),
       body: Consumer<ShoesProvider>(
         builder: (context, shoesProvider, child) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0.w),
@@ -73,7 +73,7 @@ class _DiscoverShoesState extends State<DiscoverShoes> {
                           if (index > 0) SizedBox(width: 16.w),
                           Text(
                             category,
-                            style: headline600.copyWith(
+                            style: headline600Medium.copyWith(
                               color: isSelected ? Colors.black : Colors.grey,
                               letterSpacing: 1,
                             ),

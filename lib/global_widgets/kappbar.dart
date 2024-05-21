@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../const/text_style.dart';
 
 class KAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTrailingTap;
   final bool hasTrailing;
   final bool? hasTitle;
   final String? title;
@@ -14,20 +14,20 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
       {super.key,
       this.hasTrailing = false,
        this.isDiscoverScreen,
-      required this.onTap,  this.hasTitle, this.title});
+       this.onTrailingTap,  this.hasTitle, this.title});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: 80.h,
       centerTitle: isDiscoverScreen == true?false:true,
-      title: hasTitle==true ? Text(title!, style: isDiscoverScreen==true?headline700:headline600small) : null,
+      title: hasTitle==true ? Text(title!, style: isDiscoverScreen==true?headline700Big:headline600small) : null,
       actions: [
         if (hasTrailing)
           Container(
               margin: EdgeInsets.only(right: 16.w),
               child: InkWell(
-                  onTap: onTap,
+                  onTap: onTrailingTap,
                   child: Image.asset(isDiscoverScreen==true
                       ? 'assets/images/cart.png'
                       : 'assets/images/bag-2.png'))),
