@@ -43,7 +43,6 @@ class DiscoverShoesState extends State<DiscoverShoes> {
 
   @override
   Widget build(BuildContext context) {
-   final shoesProvider = Provider.of<ShoesProvider>(context);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: Colors.white,
@@ -66,9 +65,17 @@ class DiscoverShoesState extends State<DiscoverShoes> {
               _verticalSpacing(16),
               _buildCategoryRow(shoesProvider),
               _verticalSpacing(16),
-              shoesProvider.isLoading?const Center(child: CircularProgressIndicator(),):
+
               Expanded(
-                child: GridView.builder(
+                child:               shoesProvider.isLoading?const Center(child: CircularProgressIndicator(),):
+                shoesProvider.shoes.isEmpty
+                    ? Center(
+                  child: Text(
+                    'No data available',
+                    style: headlineW700F30,
+                  ),
+                )
+                    :  GridView.builder(
                   controller: _scrollController,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
