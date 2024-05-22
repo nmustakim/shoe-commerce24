@@ -47,45 +47,24 @@ class DiscoverShoesState extends State<DiscoverShoes> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: Colors.white,
       appBar: KAppBar(
-          isDiscoverScreen: true,
-          hasTitle: true,
-          title: 'Discover',
-          hasTrailing: true,
-          onTrailingTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context)=>const ShoppingCartScreen()))),
+        isDiscoverScreen: true,
+        hasTitle: true,
+        title: 'Discover',
+        hasTrailing: true,
+        onTrailingTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ShoppingCartScreen()),
+        ),
+      ),
       body: Consumer<ShoesProvider>(
         builder: (context, shoesProvider, child) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 16.h),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: shoesProvider.categories.map<Widget>((category) {
-                    int index = shoesProvider.categories.indexOf(category);
-                    bool isSelected = index == shoesProvider.selectedIndex;
-                    return GestureDetector(
-                      onTap: () {
-                        shoesProvider.setSelectedIndex(index);
-                      },
-                      child: Row(
-                        children: [
-                          if (index > 0) SizedBox(width: 16.w),
-                          Text(
-                            category,
-                            style: headlineW600F20.copyWith(
-                              color: isSelected ? Colors.black : Colors.grey,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(height: 16.h),
+              _verticalSpacing(16),
+              _buildCategoryRow(shoesProvider),
+              _verticalSpacing(16),
               Expanded(
                 child: GridView.builder(
                   controller: _scrollController,
@@ -98,10 +77,12 @@ class DiscoverShoesState extends State<DiscoverShoes> {
                     final Shoe shoe = shoesProvider.shoes[index];
                     return ShoeCard(
                       onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ProductDetailsScreen(shoe: shoe))),
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProductDetailsScreen(shoe: shoe),
+                        ),
+                      ),
                       shoe: shoesProvider.shoes[index],
                     );
                   },
@@ -113,31 +94,74 @@ class DiscoverShoesState extends State<DiscoverShoes> {
           ),
         ),
       ),
-      floatingActionButton: InkWell(
-        onTap: () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const FilterScreen())),
-        child: Container(
-           height: 40.h,
-          width: 119.w,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100.r),
-            color: buttonBackground,
-          ),
-          child: Center(
+      floatingActionButton: _buildFloatingActionButton(context),
+    );
+  }
+
+  Widget _buildCategoryRow(ShoesProvider shoesProvider) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: shoesProvider.categories.map<Widget>((category) {
+          int index = shoesProvider.categories.indexOf(category);
+          bool isSelected = index == shoesProvider.selectedIndex;
+          return GestureDetector(
+            onTap: () {
+              shoesProvider.setSelectedIndex(index);
+            },
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/filter_icon.png'),
-                SizedBox(width: 8.w),
+                if (index > 0) _horizontalSpacing(16),
                 Text(
-                  'FILTER',
-                  style: buttonTextStyle,
+                  category,
+                  style: headlineW600F20.copyWith(
+                    color: isSelected ? Colors.black : Colors.grey,
+                    letterSpacing: 1,
+                  ),
                 ),
               ],
             ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildFloatingActionButton(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const FilterScreen()),
+      ),
+      child: Container(
+        height: 40.h,
+        width: 119.w,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100.r),
+          color: buttonBackground,
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/filter_icon.png'),
+              _horizontalSpacing(8),
+              Text(
+                'FILTER',
+                style: buttonTextStyle,
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _verticalSpacing(double height) {
+    return SizedBox(height: height.h);
+  }
+
+  Widget _horizontalSpacing(double width) {
+    return SizedBox(width: width.w);
   }
 }

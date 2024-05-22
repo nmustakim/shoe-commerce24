@@ -77,7 +77,7 @@ class FilterScreenState extends State<FilterScreen> {
 
   Widget _buildBottomAppBar(int filterCount) {
     return BottomAppBar(
-      color: buttonForeground,
+      color: primary,
       elevation: 1.0,
       child: _buildApplyResetButton(filterCount),
     );
@@ -89,7 +89,7 @@ class FilterScreenState extends State<FilterScreen> {
       children: [
         KButton(
             text: 'RESET ($filterCount)',
-            backgroundColor: buttonForeground,
+            backgroundColor: primary,
             foregroundColor: buttonBackground,
             onPressed: () {
               setState(() {
@@ -177,7 +177,7 @@ class FilterScreenState extends State<FilterScreen> {
           label: Text(option,
               style:  headlineW600F16.copyWith(
                   color:
-                      _sortBy == option ? buttonForeground : buttonBackground)),
+                      _sortBy == option ? primary : buttonBackground)),
           selected: _sortBy == option,
           onSelected: (bool selected) {
             setState(() {
@@ -202,7 +202,7 @@ class FilterScreenState extends State<FilterScreen> {
         label: Text(gender,
             style:  headlineW600F16.copyWith(
                 color:
-                    _gender == gender ? buttonForeground : buttonBackground)),
+                    _gender == gender ? primary : buttonBackground)),
         selected: _gender == gender,
         onSelected: (bool selected) {
           setState(() {
@@ -234,7 +234,7 @@ class FilterScreenState extends State<FilterScreen> {
         ),
 
         selected: _colors.contains(color),
-        selectedColor: buttonForeground,
+        selectedColor: primary,
 
         onSelected: (bool selected) {
           setState(() {

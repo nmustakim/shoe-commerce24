@@ -39,9 +39,12 @@ class ShoeCommerce extends StatelessWidget {
         designSize: const Size(375, 872),
         minTextAdapt: true,
         builder: (_, child) {
-          return const MaterialApp(
+          return  MaterialApp(
+            
+            theme: ThemeData(
+            ),
             debugShowCheckedModeBanner: false,
-            home: DiscoverShoes(),
+            home: const DiscoverShoes(),
           );
         });
   }

@@ -8,5 +8,5 @@ Color secondaryBackground4 = const Color(0XFFD7D7D7);
 Color borderLight = const Color(0XFF6F6F6F);
 
 
-Color buttonForeground = const Color(0XFFFFFFFF);
+Color primary = const Color(0XFFFFFFFF);
 Color buttonBackground = const Color(0XFF101010);

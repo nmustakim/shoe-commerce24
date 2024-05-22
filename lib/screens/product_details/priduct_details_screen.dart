@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
+import 'package:shoe_commerce/global_widgets/k_bottom_bar.dart';
 import 'package:shoe_commerce/global_widgets/kappbar.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
 import 'package:shoe_commerce/model/cart_item.dart';
@@ -50,13 +51,13 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildImageSlider(widget.shoe),
-              SizedBox(height: 20.h),
+              _verticalSpacing(20),
               _buildProductDetails(widget.shoe),
-              SizedBox(height: 20.h),
+              _verticalSpacing(20),
               _buildSizeSelection(widget.shoe.sizes),
-              SizedBox(height: 20.h),
+              _verticalSpacing(20),
               _buildDescription(),
-              SizedBox(height: 20.h),
+              _verticalSpacing(20),
               _buildReviews(widget.shoe),
               _buildAllReviewButton(onPressed: () {
                 Navigator.push(
@@ -71,15 +72,13 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomAppBar(),
-    );
-  }
-
-  Widget _buildBottomAppBar() {
-    return BottomAppBar(
-      color: buttonForeground,
-      elevation: 1.0,
-      child: _buildAddToCartSection(widget.shoe),
+      bottomNavigationBar: BottomAppBar(
+          color: primary,
+          child: KBottomBar(
+              labelText: 'Price',
+              valueText: widget.shoe.price.toString(),
+              buttonText: 'ADD TO CART',
+              onButtonPressed: () => _showAddToCartPopup(context))),
     );
   }
 
@@ -136,16 +135,16 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(shoe.name, style: bodyTextW700F20Dark),
-        SizedBox(height: 10.h),
+        _verticalSpacing(10),
         Row(
           children: [
             RatingStars(rating: shoe.averageRating),
-            SizedBox(width: 5.w),
+            _horizontalSpacing(5),
             Text(
               shoe.averageRating.toString(),
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
             ),
-            SizedBox(width: 5.w),
+            _horizontalSpacing(5),
             Text(
               '(${shoe.reviewCount} Reviews)',
               style: headlineW600F16,
@@ -162,7 +161,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
       width: 132.w,
       padding: EdgeInsets.symmetric(horizontal: 8.w),
       decoration: BoxDecoration(
-          color: buttonForeground, borderRadius: BorderRadius.circular(30.r)),
+          color: primary, borderRadius: BorderRadius.circular(30.r)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: List.generate(colors.length, (index) {
@@ -191,7 +190,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     top: 0,
                     child: Image.asset(
                       'assets/images/check.png',
-                      color: buttonForeground,
+                      color: primary,
                     ),
                   )
                 else
@@ -217,7 +216,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Size', style: headlineW600F16),
-        SizedBox(height: 10.h),
+        _verticalSpacing(10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(sizes.length, (index) {
@@ -231,7 +230,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: Container(
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
-                  color: isSelected ? buttonBackground : buttonForeground,
+                  color: isSelected ? buttonBackground : primary,
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: isSelected ? buttonBackground : borderLight,
@@ -239,8 +238,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
                 child: Text(StringUtil.formatSize(sizes[index], index),
                     style: bodyTextW700F14Light.copyWith(
-                        color:
-                            isSelected ? buttonForeground : buttonBackground)),
+                        color: isSelected ? primary : buttonBackground)),
               ),
             );
           }),
@@ -254,7 +252,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Description', style: headlineW600F16),
-        SizedBox(height: 10.h),
+        _verticalSpacing(10),
         Wrap(
           children: [
             Text(
@@ -272,7 +270,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Reviews (${shoe.reviews.length})', style: headlineW600F16),
-        SizedBox(height: 10.h),
+        _verticalSpacing(10),
         ...shoe.reviews.map((review) {
           return Column(
             children: [
@@ -300,39 +298,12 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 5.h),
+              _verticalSpacing(5),
               Text(review.comment, style: TextStyle(fontSize: 14.sp)),
               const Divider(),
             ],
           );
         }),
-      ],
-    );
-  }
-
-  Widget _buildAddToCartSection(Shoe shoe) {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Price', style: bodyTextW400F12Light),
-                Text('\$${shoe.price}', style: bodyTextW700F20Dark),
-              ],
-            ),
-            KButton(
-              height: 50.h,
-              width: 156.w,
-              text: 'ADD TO CART',
-              onPressed: () => _showAddToCartPopup(context),
-            ),
-          ],
-        ),
       ],
     );
   }
@@ -358,13 +329,13 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   void _showAddToCartPopup(BuildContext context) {
-    int selectedQuantity = 1; // Initial quantity
+    int selectedQuantity = 1;
 
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.fromLTRB(24.w, 34.h, 24.w, 24.h),
+          padding: EdgeInsets.fromLTRB(24.w, 34.h, 24.w, 16.h),
           child: Consumer<CartProvider>(
             builder: (context, cartProvider, _) {
               return Column(
@@ -382,7 +353,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           icon: const Icon(Icons.close))
                     ],
                   ),
-                  SizedBox(height: 24.h),
+                  _verticalSpacing(24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -444,45 +415,27 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 24.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Total Price',
-                            style: bodyTextW400F12Light,
-                          ),
-                          Text(
-                            '\$${(widget.shoe.price * selectedQuantity).toStringAsFixed(2)}',
-                            style: bodyTextW700F20Dark,
-                          ),
-                        ],
-                      ),
-                      KButton(
-                        text: 'ADD TO CART',
-                        onPressed: () {
-                          final shoe = widget.shoe;
-                          cartProvider.addToCart(CartItemModel(
-                              image: shoe.images.first,
-                              size: StringUtil.formatSize(
-                                  shoe.sizes[_selectedSizeIndex],
-                                  _selectedSizeIndex),
-                              name: shoe.name,
-                              brand: shoe.brand,
-                              color: shoe.colors[_selectedColorIndex],
-                              price: shoe.price,
-                              quantity: selectedQuantity));
-                          Navigator.pop(context);
-                          _showAddedToCartPopup(context, selectedQuantity);
-                        },
-                        height: 52.h,
-                        width: 156.w,
-                      ),
-                    ],
-                  )
+                  _verticalSpacing(24),
+                  KBottomBar(
+                      labelText: 'Total Price',
+                      valueText:
+                          '\$${(widget.shoe.price * selectedQuantity).toStringAsFixed(2)}',
+                      buttonText: 'ADD TO CART',
+                      onButtonPressed: () {
+                        final shoe = widget.shoe;
+                        cartProvider.addToCart(CartItemModel(
+                            image: shoe.images.first,
+                            size: StringUtil.formatSize(
+                                shoe.sizes[_selectedSizeIndex],
+                                _selectedSizeIndex),
+                            name: shoe.name,
+                            brand: shoe.brand,
+                            color: shoe.colors[_selectedColorIndex],
+                            price: shoe.price,
+                            quantity: selectedQuantity));
+                        Navigator.pop(context);
+                        _showAddedToCartPopup(context, selectedQuantity);
+                      })
                 ],
               );
             },
@@ -497,15 +450,13 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
       context: context,
       builder: (context) {
         return Padding(
-            padding: EdgeInsets.fromLTRB(24.w, 34.h, 24.w, 24.h),
+            padding: EdgeInsets.fromLTRB(24.w, 34.h, 24.w, 16.h),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset('assets/images/tick-circle.png'),
-                  SizedBox(
-                    height: 24.h,
-                  ),
+                  _verticalSpacing(24),
                   Text(
                     'Added to cart',
                     style: headlineW600F24,
@@ -514,9 +465,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     '$quantity Item total',
                     style: bodyTextW400F12Light,
                   ),
-                  SizedBox(
-                    height: 16.h,
-                  ),
+                  _verticalSpacing(12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -529,7 +478,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   builder: (context) => const DiscoverShoes()));
                         },
                         foregroundColor: buttonBackground,
-                        backgroundColor: buttonForeground,
+                        backgroundColor: primary,
                         height: 52.h,
                         width: 156.w,
                       ),
@@ -552,5 +501,13 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ]));
       },
     );
+  }
+
+  Widget _horizontalSpacing(double width) {
+    return SizedBox(width: width.w);
+  }
+
+  Widget _verticalSpacing(double height) {
+    return SizedBox(height: height.h);
   }
 }
