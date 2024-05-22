@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:shoe_commerce/global_widgets/kappbar.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
+import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
 
 import '../const/color.dart';
 import '../const/text_style.dart';
+import '../provider/shoes_provider.dart';
 
 class FilterScreen extends StatefulWidget {
   const FilterScreen({super.key});
@@ -15,11 +18,11 @@ class FilterScreen extends StatefulWidget {
 
 class FilterScreenState extends State<FilterScreen> {
   double _minPrice = 200;
-  double _maxPrice = 750;
+  double _maxPrice = 300;
   String _selectedBrand = '';
   String _sortBy = '';
   String _gender = '';
-  List<String> _colors = [''];
+  List<String> _colors = [];
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,10 @@ class FilterScreenState extends State<FilterScreen> {
 
     return Scaffold(
       appBar: KAppBar(
-          hasTrailing: true, title: 'Filter', hasTitle: true, onTrailingTap: () {}),
+          hasTrailing: true,
+          title: 'Filter',
+          hasTitle: true,
+          onTrailingTap: () {}),
       body: Padding(
         padding: EdgeInsets.all(16.w),
         child: ListView(
@@ -67,7 +73,6 @@ class FilterScreenState extends State<FilterScreen> {
             Text('Color', style: headlineW600F16),
             SizedBox(height: 20.h),
             _buildColorButtons(),
-
           ],
         ),
       ),
@@ -93,24 +98,49 @@ class FilterScreenState extends State<FilterScreen> {
             foregroundColor: buttonBackground,
             onPressed: () {
               setState(() {
-                _minPrice = 200;
+                _minPrice = 0;
                 _maxPrice = 750;
                 _selectedBrand = '';
                 _sortBy = '';
                 _gender = '';
-                _colors = [''];
+                _colors = [];
               });
             },
             height: 50.h,
             width: 150.w),
-        KButton(text: 'APPLY', onPressed: () {}, height: 50.h, width: 150.h)
+        Consumer<ShoesProvider>(
+          builder: (_,shoesProvider,child){
+          return KButton(
+              text:shoesProvider.isLoading? 'Applying...':'APPLY',
+              onPressed: shoesProvider.isLoading?(){}:() {
+
+               shoesProvider.fetchShoesByFilter(
+                  brand: _selectedBrand,
+                  minPrice: _minPrice,
+                  maxPrice: _maxPrice,
+                  sortBy: _sortBy,
+                  gender: _gender,
+                  colors: _colors,
+                );
+
+               WidgetsBinding.instance.addPostFrameCallback((_) {
+                 Navigator.push(
+                   context,
+                   MaterialPageRoute(builder: (context) => const DiscoverShoes()),
+                 );
+               });
+
+              },
+              height: 50.h,
+              width: 150.h);}
+        )
       ],
     );
   }
 
   List<Widget> _buildBrandButtons() {
     List<String> brands = [
-      ''
+
           'Nike',
       'Puma',
       'Adidas',
@@ -142,7 +172,8 @@ class FilterScreenState extends State<FilterScreen> {
                   Positioned(
                       bottom: 0,
                       right: 0,
-                      child: Image.asset('assets/images/tick-circle.png'))
+                      top: 28.h,
+                      child: Image.asset('assets/images/check_round.png'))
               ],
             ),
             SizedBox(
@@ -169,23 +200,22 @@ class FilterScreenState extends State<FilterScreen> {
       child: Wrap(
           spacing: 12.w,
           children: sortOptions.map((option) {
-        return ChoiceChip(
-          showCheckmark: false,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(140.r)),
-          selectedColor: buttonBackground,
-          label: Text(option,
-              style:  headlineW600F16.copyWith(
-                  color:
-                      _sortBy == option ? primary : buttonBackground)),
-          selected: _sortBy == option,
-          onSelected: (bool selected) {
-            setState(() {
-              _sortBy = option;
-            });
-          },
-        );
-      }).toList()),
+            return ChoiceChip(
+              showCheckmark: false,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(140.r)),
+              selectedColor: buttonBackground,
+              label: Text(option,
+                  style: headlineW600F16.copyWith(
+                      color: _sortBy == option ? primary : buttonBackground)),
+              selected: _sortBy == option,
+              onSelected: (bool selected) {
+                setState(() {
+                  _sortBy = option;
+                });
+              },
+            );
+          }).toList()),
     );
   }
 
@@ -194,23 +224,22 @@ class FilterScreenState extends State<FilterScreen> {
     return Wrap(
         spacing: 12.w,
         children: genders.map((gender) {
-      return ChoiceChip(
-        showCheckmark: false,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(140.r)),
-        selectedColor: buttonBackground,
-        label: Text(gender,
-            style:  headlineW600F16.copyWith(
-                color:
-                    _gender == gender ? primary : buttonBackground)),
-        selected: _gender == gender,
-        onSelected: (bool selected) {
-          setState(() {
-            _gender = gender;
-          });
-        },
-      );
-    }).toList());
+          return ChoiceChip(
+            showCheckmark: false,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(140.r)),
+            selectedColor: buttonBackground,
+            label: Text(gender,
+                style: headlineW600F16.copyWith(
+                    color: _gender == gender ? primary : buttonBackground)),
+            selected: _gender == gender,
+            onSelected: (bool selected) {
+              setState(() {
+                _gender = gender;
+              });
+            },
+          );
+        }).toList());
   }
 
   Wrap _buildColorButtons() {
@@ -218,43 +247,54 @@ class FilterScreenState extends State<FilterScreen> {
     return Wrap(
         spacing: 12.w,
         children: colors.map((color) {
-      return ChoiceChip(
-        showCheckmark: false,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.r),side: BorderSide(color:_colors.contains(color)?buttonBackground:secondaryBackground1 )),
-        label: Row(
-          mainAxisSize: MainAxisSize.min,
-
-          children: [
-            CircleAvatar(radius: 8.r,backgroundColor: color=='Black'?Colors.black:color=='White'?Colors.white:Colors.red,),
-            SizedBox(width: 8.w,),
-            Text(color,
-                style: headlineW600F16),
-          ],
-        ),
-
-        selected: _colors.contains(color),
-        selectedColor: primary,
-
-        onSelected: (bool selected) {
-          setState(() {
-            if (selected) {
-              _colors.add(color);
-            } else {
-              _colors.remove(color);
-            }
-          });
-        },
-      );
-    }).toList());
+          return ChoiceChip(
+            showCheckmark: false,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100.r),
+                side: BorderSide(
+                    color: _colors.contains(color)
+                        ? buttonBackground
+                        : secondaryBackground1)),
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleAvatar(
+                  radius: 8.r,
+                  backgroundColor: color == 'Black'
+                      ? Colors.black
+                      : color == 'White'
+                          ? Colors.white
+                          : Colors.red,
+                ),
+                SizedBox(
+                  width: 8.w,
+                ),
+                Text(color, style: headlineW600F16),
+              ],
+            ),
+            selected: _colors.contains(color),
+            selectedColor: primary,
+            onSelected: (bool selected) {
+              setState(() {
+                if (selected) {
+                  _colors.add(color);
+                } else {
+                  _colors.remove(color);
+                }
+              });
+            },
+          );
+        }).toList());
   }
+
   int calculateFilterCount() {
     int count = 0;
     if (_minPrice != 200 || _maxPrice != 750) count++;
     if (_selectedBrand.isNotEmpty) count++;
     if (_sortBy.isNotEmpty) count++;
     if (_gender.isNotEmpty) count++;
-    count += _colors.length - 1; // Subtract 1 to exclude the empty string in _colors
+    count +=
+        _colors.length - 1; // Subtract 1 to exclude the empty string in _colors
     return count;
   }
 }

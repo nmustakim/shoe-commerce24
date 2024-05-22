@@ -45,4 +45,11 @@ class CartProvider extends ChangeNotifier {
       _totalPrice += item.price * item.quantity;
     }
   }
+
+  void resetCart() {
+    _items.clear();
+    _totalPrice = 0.0;
+    notifyListeners();
+  }
+
 }

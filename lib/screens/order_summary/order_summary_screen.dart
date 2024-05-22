@@ -13,22 +13,29 @@ class OrderSummaryScreen extends StatelessWidget {
   final double totalPrice;
   const OrderSummaryScreen(
       {super.key, required this.orders, required this.totalPrice});
+  final double shipping = 20.00;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
         color: primary,
-        child: KBottomBar(
-          labelText: 'Grand Total',
-          valueText: '\$${(totalPrice + 20.00).toStringAsFixed(2)}',
-          buttonText: 'PAYMENT',
-          onButtonPressed: () async{
-            await Provider.of<OrderProvider>(context, listen: false).addOrder(orders, totalPrice);
-
+        child:  Consumer<OrderProvider>(
+          builder: (BuildContext context, OrderProvider value, Widget? child) {
+            return KBottomBar(
+              labelText: 'Grand Total',
+              valueText: '\$${(totalPrice + shipping).toStringAsFixed(2)}',
+              buttonText: value.isLoading ? 'Please wait...' : 'PAYMENT',
+              onButtonPressed: value.isLoading ? (){}: () async {
+                final double grandTotal = totalPrice+shipping;
+                await value.addOrder(
+                    orders, grandTotal,context);
+              },
+            );
           },
         ),
       ),
+
       appBar: const KAppBar(
         hasTitle: true,
         title: 'Order Summary',

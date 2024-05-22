@@ -43,6 +43,7 @@ class DiscoverShoesState extends State<DiscoverShoes> {
 
   @override
   Widget build(BuildContext context) {
+   final shoesProvider = Provider.of<ShoesProvider>(context);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: Colors.white,
@@ -65,6 +66,7 @@ class DiscoverShoesState extends State<DiscoverShoes> {
               _verticalSpacing(16),
               _buildCategoryRow(shoesProvider),
               _verticalSpacing(16),
+              shoesProvider.isLoading?const Center(child: CircularProgressIndicator(),):
               Expanded(
                 child: GridView.builder(
                   controller: _scrollController,
@@ -88,7 +90,7 @@ class DiscoverShoesState extends State<DiscoverShoes> {
                   },
                 ),
               ),
-              if (shoesProvider.isLoading)
+              if (shoesProvider.isFetchingMore)
                 const Center(child: CircularProgressIndicator()),
             ],
           ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/provider/cart_provider.dart';
+import 'package:shoe_commerce/provider/order_provider.dart';
 import 'package:shoe_commerce/provider/shoes_provider.dart';
 import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
 import 'package:shoe_commerce/services/shoe_service.dart';
@@ -24,7 +25,10 @@ Future<void> main() async {
               ShoesProvider(ShoesService(FirebaseFirestore.instance))),
       ChangeNotifierProvider(
           create: (BuildContext context) =>
-              CartProvider())
+              CartProvider()),
+        ChangeNotifierProvider(
+            create: (BuildContext context) =>
+                OrderProvider())
     ],
       child: const ShoeCommerce()),
   );

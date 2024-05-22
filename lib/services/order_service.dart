@@ -9,7 +9,7 @@ class OrderService {
   Future<void> addOrder(List<CartItemModel> orders, double totalPrice) async {
     try {
       var orderData = {
-        'totalPrice': totalPrice,
+        'grandTotal': totalPrice,
         'orders': orders.map((order) => {
           'name': order.name,
           'brand': order.brand,

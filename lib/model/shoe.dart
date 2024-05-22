@@ -4,6 +4,7 @@ class Shoe {
   final String id;
   final String logo;
   final String name;
+  final String gender;
   final String brand;
   final String description;
   final double price;
@@ -14,7 +15,7 @@ class Shoe {
   final List<String> colors;
   final List<double> sizes;
 
-  Shoe({required this.brand,
+  Shoe({required this.gender, required this.brand,
     required this.id,
     required this.description,
     required this.images,
@@ -40,6 +41,7 @@ class Shoe {
       id: doc.id,
       logo: data['logo'] ?? '',
       name: data['title'] ?? '',
+      gender: data['gender']??'',
       price: (data['price'] ?? 0).toDouble(),
       reviewCount: data['review_count'] ?? 0,
       averageRating: (data['avg_rating'] ?? 0.0).toDouble(),
