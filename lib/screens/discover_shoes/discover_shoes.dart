@@ -65,37 +65,40 @@ class DiscoverShoesState extends State<DiscoverShoes> {
               _verticalSpacing(16),
               _buildCategoryRow(shoesProvider),
               _verticalSpacing(16),
-
               Expanded(
-                child:               shoesProvider.isLoading?const Center(child: CircularProgressIndicator(),):
-                shoesProvider.shoes.isEmpty
-                    ? Center(
-                  child: Text(
-                    'No data available',
-                    style: headlineW700F30,
-                  ),
-                )
-                    :  GridView.builder(
-                  controller: _scrollController,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.7111111111,
-                  ),
-                  itemCount: shoesProvider.shoes.length,
-                  itemBuilder: (context, index) {
-                    final Shoe shoe = shoesProvider.shoes[index];
-                    return ShoeCard(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ProductDetailsScreen(shoe: shoe),
-                        ),
-                      ),
-                      shoe: shoesProvider.shoes[index],
-                    );
-                  },
-                ),
+                child: shoesProvider.isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : shoesProvider.shoes.isEmpty
+                        ? Center(
+                            child: Text(
+                              'No shoes found!',
+                              style: headlineW700F30,
+                            ),
+                          )
+                        : GridView.builder(
+                            controller: _scrollController,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.7111111111,
+                            ),
+                            itemCount: shoesProvider.shoes.length,
+                            itemBuilder: (context, index) {
+                              final Shoe shoe = shoesProvider.shoes[index];
+                              return ShoeCard(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProductDetailsScreen(shoe: shoe),
+                                  ),
+                                ),
+                                shoe: shoesProvider.shoes[index],
+                              );
+                            },
+                          ),
               ),
               if (shoesProvider.isFetchingMore)
                 const Center(child: CircularProgressIndicator()),
