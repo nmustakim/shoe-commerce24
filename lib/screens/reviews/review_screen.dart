@@ -49,7 +49,7 @@ class ReviewScreenState extends State<ReviewScreen> {
                   Row(
                     children: [
                       const Icon(Icons.star, color: Colors.yellow),
-                      Text(widget.shoe.averageRating.toString(), style: headline600Medium),
+                      Text(widget.shoe.averageRating.toString(), style: headlineW600F20),
                     ],
                   ),
                 ],
@@ -67,8 +67,8 @@ class ReviewScreenState extends State<ReviewScreen> {
                     child: Text(
                       index == 0 ? 'All' : '${6 - index} Stars',
                       style: selectedStar == (index == 0 ? null : 6 - index)
-                          ? bodyText700Small
-                          : bodyText400LightMedium,
+                          ? bodyTextW700F14Dark
+                          : bodyTextW400F14Light,
                     ),
                   );
                 }),
@@ -107,8 +107,8 @@ class ReviewScreenState extends State<ReviewScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(review.userId, style: bodyText700Small),
-                    Text(review.timestamp.toString(), style: bodyText400LightSmall),
+                    Text(review.userId, style: bodyTextW700F14Dark),
+                    Text(review.timestamp.toString(), style: bodyTextW400F11Light),
                   ],
                 ),
                 SizedBox(height: 4.h),
@@ -122,7 +122,7 @@ class ReviewScreenState extends State<ReviewScreen> {
                   }),
                 ),
                 SizedBox(height: 4.h),
-                Text(review.comment, style: bodyText400LightMedium),
+                Text(review.comment, style: bodyTextW400F14Light),
               ],
             ),
           ),

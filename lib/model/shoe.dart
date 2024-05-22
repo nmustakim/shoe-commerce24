@@ -4,6 +4,7 @@ class Shoe {
   final String id;
   final String logo;
   final String name;
+  final String brand;
   final String description;
   final double price;
   final int reviewCount;
@@ -13,7 +14,7 @@ class Shoe {
   final List<String> colors;
   final List<double> sizes;
 
-  Shoe({
+  Shoe({required this.brand,
     required this.id,
     required this.description,
     required this.images,
@@ -46,7 +47,7 @@ class Shoe {
       images: List<String>.from(data['image'] ?? []),
       colors: List<String>.from(data['colors'] ?? []),
       sizes: List<double>.from((data['sizes'] ?? []).map((size) => size.toDouble())),
-      description: data['description'] ?? '',
+      description: data['description'] ?? '', brand: data['brand']??'',
     );
   }
 }

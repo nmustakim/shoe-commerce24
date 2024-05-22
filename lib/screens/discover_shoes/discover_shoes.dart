@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/text_style.dart';
 import 'package:shoe_commerce/global_widgets/kappbar.dart';
+import 'package:shoe_commerce/screens/cart/cart_screen.dart';
 import 'package:shoe_commerce/screens/discover_shoes/widgets/shoe_card.dart';
 import 'package:shoe_commerce/screens/filter_screen.dart';
 import 'package:shoe_commerce/screens/product_details/priduct_details_screen.dart';
@@ -14,10 +15,10 @@ class DiscoverShoes extends StatefulWidget {
   const DiscoverShoes({super.key});
 
   @override
-  _DiscoverShoesState createState() => _DiscoverShoesState();
+  DiscoverShoesState createState() => DiscoverShoesState();
 }
 
-class _DiscoverShoesState extends State<DiscoverShoes> {
+class DiscoverShoesState extends State<DiscoverShoes> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -50,7 +51,7 @@ class _DiscoverShoesState extends State<DiscoverShoes> {
           hasTitle: true,
           title: 'Discover',
           hasTrailing: true,
-          onTrailingTap: () {}),
+          onTrailingTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context)=>const ShoppingCartScreen()))),
       body: Consumer<ShoesProvider>(
         builder: (context, shoesProvider, child) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0.w),
@@ -73,7 +74,7 @@ class _DiscoverShoesState extends State<DiscoverShoes> {
                           if (index > 0) SizedBox(width: 16.w),
                           Text(
                             category,
-                            style: headline600Medium.copyWith(
+                            style: headlineW600F20.copyWith(
                               color: isSelected ? Colors.black : Colors.grey,
                               letterSpacing: 1,
                             ),

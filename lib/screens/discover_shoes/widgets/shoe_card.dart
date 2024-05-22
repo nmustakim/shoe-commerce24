@@ -48,7 +48,7 @@ class ShoeCard extends StatelessWidget {
             margin: EdgeInsets.only(left: 8.w),
             child: Align(
               alignment: Alignment.topLeft,
-              child: Text(shoe.name, style: bodyText400Dark),
+              child: Text(shoe.name, style: bodyTextW400F12Dark),
             ),
           ),
           SizedBox(
@@ -67,11 +67,11 @@ class ShoeCard extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: '${shoe.averageRating}',
-                        style: headline700Big.copyWith(fontSize: 11.sp),
+                        style: headlineW700F18Dark.copyWith(fontSize: 11.sp),
                       ),
                       TextSpan(
                         text: ' (${shoe.reviewCount} Reviews)',
-                        style: bodyText400Light,
+                        style: bodyTextW400F12Light,
                       ),
                     ],
                   ),
@@ -84,7 +84,7 @@ class ShoeCard extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.only(left: 8.w),
               child: Text('\$${shoe.price.toStringAsFixed(2)}',
-                  style: bodyText400Dark.copyWith(fontWeight: FontWeight.w700)),
+                  style: bodyTextW400F12Dark.copyWith(fontWeight: FontWeight.w700)),
             ),
           ),
         ],

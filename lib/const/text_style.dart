@@ -1,54 +1,69 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-final bodyText400Dark = GoogleFonts.urbanist(
-  fontSize: 12.sp,
-  fontWeight:FontWeight.w400,
 
+
+
+
+
+final headlineW700F30 =
+GoogleFonts.urbanist(fontSize: 30.sp, fontWeight: FontWeight.w700);
+
+final headlineW600F24 = GoogleFonts.urbanist(
+  fontSize: 24.sp,
+  fontWeight: FontWeight.w600,
 );
-final buttonTextStyle = GoogleFonts.urbanist(
-    fontSize: 14.sp, fontWeight: FontWeight.w700, color: Colors.white);
+final headlineW700F18Dark =
+GoogleFonts.urbanist(fontSize: 18.sp, fontWeight: FontWeight.w700,color:const Color(0XFF160700));
 
-final bodyText400Light =
+final headlineW600F20 = GoogleFonts.urbanist(
+  fontSize: 20.sp,
+  fontWeight: FontWeight.w600,
+);
+final headlineW600F16 = GoogleFonts.urbanist(
+  fontSize: 16.sp,
+  fontWeight: FontWeight.w600,
+  color:const Color(0XFF101010)
+);
+
+final bodyTextW400F12Dark = GoogleFonts.urbanist(
+  fontSize: 12.sp,
+  fontWeight: FontWeight.w400,
+);
+
+
+final bodyTextW400F12Light =
     GoogleFonts.urbanist(fontSize: 12.sp, color: const Color(0XFFB7B7B7));
 
-final bodyText400LightMedium = GoogleFonts.urbanist(
+final bodyTextW400F14Light = GoogleFonts.urbanist(
     fontWeight: FontWeight.w400,
     fontSize: 14.sp,
     color: const Color(0XFF6F6F6F));
 
-final bodyText400LightSmall = GoogleFonts.urbanist(
+final bodyTextW400F14LightDark = GoogleFonts.urbanist(
+    fontWeight: FontWeight.w400,
+    fontSize: 14.sp,
+    color: const Color(0XFF666666));
+
+final bodyTextW400F11Light = GoogleFonts.urbanist(
     fontWeight: FontWeight.w400,
     fontSize: 11.sp,
     color: const Color(0XFFB7B7B7));
 
-final bodyText700Small =
+
+
+final bodyTextW700F14Dark =
     GoogleFonts.urbanist(fontSize: 14.sp, fontWeight: FontWeight.w700);
 
-final bodyText700SmallLight = GoogleFonts.urbanist(
+final bodyTextW700F14Light = GoogleFonts.urbanist(
     fontSize: 14.sp,
     fontWeight: FontWeight.w700,
     color: const Color(0XFF6F6F6F));
 
-final bodyText700Medium =
-    GoogleFonts.urbanist(fontSize: 20.sp, fontWeight: FontWeight.w700);
+final bodyTextW700F20Dark =
+GoogleFonts.urbanist(fontSize: 20.sp, fontWeight: FontWeight.w700);
 
-final headline700Big =
-    GoogleFonts.urbanist(fontSize: 30.sp, fontWeight: FontWeight.w700);
-
-final headline600Big = GoogleFonts.urbanist(
-  fontSize: 24.sp,
-  fontWeight: FontWeight.w600,
-);
-
-final headline600Medium = GoogleFonts.urbanist(
-  fontSize: 20.sp,
-  fontWeight: FontWeight.w600,
-);
-final headline600small = GoogleFonts.urbanist(
-  fontSize: 16.sp,
-  fontWeight: FontWeight.w600,
-);
+final buttonTextStyle = GoogleFonts.urbanist(
+    fontSize: 14.sp, fontWeight: FontWeight.w700, color: Colors.white);

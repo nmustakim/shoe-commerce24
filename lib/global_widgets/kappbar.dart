@@ -21,7 +21,7 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       toolbarHeight: 80.h,
       centerTitle: isDiscoverScreen == true?false:true,
-      title: hasTitle==true ? Text(title!, style: isDiscoverScreen==true?headline700Big:headline600small) : null,
+      title: hasTitle==true ? Text(title!, style: isDiscoverScreen==true?headlineW700F18Dark:headlineW600F16) : null,
       actions: [
         if (hasTrailing)
           Container(

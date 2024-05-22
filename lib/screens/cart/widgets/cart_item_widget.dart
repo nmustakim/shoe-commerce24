@@ -5,7 +5,7 @@ import 'package:shoe_commerce/const/text_style.dart';
 import 'package:shoe_commerce/model/cart_item.dart';
 
 class CartItemWidget extends StatelessWidget {
-  final CartItem cartItem;
+  final CartItemModel cartItem;
   final VoidCallback onRemove;
   final VoidCallback onAdd;
 
@@ -21,14 +21,16 @@ class CartItemWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             height: 88.h,
             width: 88.w,
             decoration: BoxDecoration(
-                color: secondaryBackground1,
-                borderRadius: BorderRadius.circular(20.r)),
-            child: Image.network(cartItem.shoe.images.first),
+              color: secondaryBackground1,
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: Image.network(cartItem.image),
           ),
           SizedBox(width: 16.w),
           Expanded(
@@ -36,21 +38,21 @@ class CartItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  cartItem.shoe.name,
-                  style: headline600small,
+                  cartItem.name,
+                  style: headlineW600F16,
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  '  ${cartItem.shoe.colors.first} . ${cartItem.shoe.sizes.first}',
-                  style: bodyText400Light.copyWith(color: const Color(0XFF666666)),
+                  '${cartItem.brand} ${cartItem.color} . ${cartItem.size}',
+                  style: bodyTextW400F12Light.copyWith(color: const Color(0XFF666666)),
                 ),
                 SizedBox(height: 4.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$${cartItem.shoe.price}',
-                      style: bodyText700Small,
+                      '\$${cartItem.price}',
+                      style: bodyTextW700F14Dark,
                     ),
                     SizedBox(
                       child: Row(
@@ -64,7 +66,7 @@ class CartItemWidget extends StatelessWidget {
                           ),
                           Text(
                             cartItem.quantity.toString(),
-                            style: bodyText700Small,
+                            style: bodyTextW700F14Dark,
                           ),
                           IconButton(
                             icon: Icon(Icons.add_circle_outline, size: 24.sp),
@@ -72,7 +74,7 @@ class CartItemWidget extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],

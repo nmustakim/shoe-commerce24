@@ -32,14 +32,14 @@ class FilterScreenState extends State<FilterScreen> {
         padding: EdgeInsets.all(16.w),
         child: ListView(
           children: [
-            Text('Brands', style: headline600small),
+            Text('Brands', style: headlineW600F16),
             SizedBox(height: 16.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: _buildBrandButtons(),
             ),
             SizedBox(height: 34.h),
-            Text('Price Range', style: headline600small),
+            Text('Price Range', style: headlineW600F16),
             SizedBox(height: 20.h),
             RangeSlider(
               values: RangeValues(_minPrice, _maxPrice),
@@ -56,15 +56,15 @@ class FilterScreenState extends State<FilterScreen> {
               },
             ),
             SizedBox(height: 34.h),
-            Text('Sort By', style: headline600small),
+            Text('Sort By', style: headlineW600F16),
             SizedBox(height: 20.h),
             _buildSortButtons(),
             SizedBox(height: 34.h),
-            Text('Gender', style: headline600small),
+            Text('Gender', style: headlineW600F16),
             SizedBox(height: 20.h),
             _buildGenderButtons(),
             SizedBox(height: 34.h),
-            Text('Color', style: headline600small),
+            Text('Color', style: headlineW600F16),
             SizedBox(height: 20.h),
             _buildColorButtons(),
 
@@ -150,11 +150,11 @@ class FilterScreenState extends State<FilterScreen> {
             ),
             Text(
               brand,
-              style: bodyText700Small,
+              style: bodyTextW700F14Dark,
             ),
             Text(
               '500 Items',
-              style: bodyText400LightSmall,
+              style: bodyTextW400F11Light,
             )
           ],
         ),
@@ -175,7 +175,7 @@ class FilterScreenState extends State<FilterScreen> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(140.r)),
           selectedColor: buttonBackground,
           label: Text(option,
-              style:  headline600small.copyWith(
+              style:  headlineW600F16.copyWith(
                   color:
                       _sortBy == option ? buttonForeground : buttonBackground)),
           selected: _sortBy == option,
@@ -200,7 +200,7 @@ class FilterScreenState extends State<FilterScreen> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(140.r)),
         selectedColor: buttonBackground,
         label: Text(gender,
-            style:  headline600small.copyWith(
+            style:  headlineW600F16.copyWith(
                 color:
                     _gender == gender ? buttonForeground : buttonBackground)),
         selected: _gender == gender,
@@ -229,7 +229,7 @@ class FilterScreenState extends State<FilterScreen> {
             CircleAvatar(radius: 8.r,backgroundColor: color=='Black'?Colors.black:color=='White'?Colors.white:Colors.red,),
             SizedBox(width: 8.w,),
             Text(color,
-                style: headline600small),
+                style: headlineW600F16),
           ],
         ),
 

@@ -1,35 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:shoe_commerce/model/shoe.dart';
 import 'package:shoe_commerce/model/cart_item.dart';
 
 class CartProvider extends ChangeNotifier {
-  final List<CartItem> _items = [];
+  final List<CartItemModel> _items = [];
   double _totalPrice = 0.0;
 
-  List<CartItem> get items => _items;
+  List<CartItemModel> get items => _items;
   double get totalPrice => _totalPrice;
 
-  void addToCart(Shoe shoe, int quantity) {
-    final existingIndex = _items.indexWhere((item) => item.shoe == shoe);
+  void addToCart(CartItemModel cartItem) {
+    final existingIndex = _items.indexWhere((item) => item == cartItem);
     if (existingIndex != -1) {
-      _items[existingIndex] = _items[existingIndex].copyWith(quantity: _items[existingIndex].quantity + quantity);
+      _items[existingIndex] = _items[existingIndex].copyWith(quantity: _items[existingIndex].quantity + cartItem.quantity);
     } else {
-      _items.add(CartItem(shoe: shoe, quantity: quantity));
+      _items.add(cartItem);
     }
     _updateTotalPrice();
     notifyListeners();
   }
 
-  void removeFromCart(CartItem cartItem) {
-    _items.remove(cartItem);
+  void removeFromCart(CartItemModel cartItem) {
+    _items.removeWhere((item) => item == cartItem);
     _updateTotalPrice();
     notifyListeners();
+  }
+
+  void decrementQuantity(CartItemModel cartItem) {
+    final existingIndex = _items.indexWhere((item) => item == cartItem);
+    if (existingIndex != -1) {
+      final currentQuantity = _items[existingIndex].quantity;
+      if (currentQuantity > 1) {
+        _items[existingIndex] = _items[existingIndex].copyWith(quantity: currentQuantity - 1);
+      } else {
+        _items.removeAt(existingIndex);
+      }
+      _updateTotalPrice();
+      notifyListeners();
+    }
   }
 
   void _updateTotalPrice() {
     _totalPrice = 0;
     for (var item in _items) {
-      _totalPrice += item.shoe.price * item.quantity;
+      _totalPrice += item.price * item.quantity;
     }
   }
 }

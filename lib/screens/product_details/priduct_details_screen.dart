@@ -4,9 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/global_widgets/kappbar.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
+import 'package:shoe_commerce/model/cart_item.dart';
 import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
 import 'package:shoe_commerce/screens/product_details/widgets.dart';
 import 'package:shoe_commerce/screens/reviews/review_screen.dart';
+import 'package:shoe_commerce/util/color_util.dart';
+import 'package:shoe_commerce/util/string_util.dart';
 import '../../const/text_style.dart';
 import '../../model/shoe.dart';
 import '../../provider/cart_provider.dart';
@@ -28,192 +31,18 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   final PageController _pageController = PageController();
   int selectedQuantity = 1;
-  void _showAddToCartPopup(BuildContext context) {
-    int selectedQuantity = 1; // Initial quantity
-
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(24.w, 34.h, 24.w, 24.h),
-          child: Consumer<CartProvider>(
-            builder: (context, cartProvider, _) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Add to Cart', style: bodyText700Medium),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.close))
-                    ],
-                  ),
-                  SizedBox(height: 24.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Quantity',
-                              style: bodyText700Small,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 60.w,
-                            height: 40.h,
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: TextField(
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                ),
-                                textAlign: TextAlign.center,
-                                keyboardType: TextInputType.number,
-                                controller: TextEditingController(
-                                    text: selectedQuantity.toString()),
-                                onChanged: (value) {
-                                  if (int.tryParse(value) != null) {
-                                    selectedQuantity = int.parse(value);
-                                  }
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.remove_circle_outline,
-                                color: secondaryBackground2, size: 24.sp),
-                            onPressed: () {
-                              if (selectedQuantity > 1) {
-                                selectedQuantity--;
-                                (context as Element).markNeedsBuild();
-                              }
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.add_circle_outline, size: 24.sp),
-                            onPressed: () {
-                              selectedQuantity++;
-                              (context as Element).markNeedsBuild();
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 24.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Total Price',
-                            style: bodyText400Light,
-                          ),
-                          Text(
-                            '\$${(widget.shoe.price * selectedQuantity).toStringAsFixed(2)}',
-                            style: bodyText700Medium,
-                          ),
-                        ],
-                      ),
-                      KButton(
-                        text: 'ADD TO CART',
-                        onPressed: () {
-                          cartProvider.addToCart(widget.shoe, selectedQuantity);
-                          Navigator.pop(context);
-                          _showAddedToCartPopup(context);
-                        },
-                        height: 52.h,
-                        width: 156.w,
-                      ),
-                    ],
-                  )
-                ],
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  void _showAddedToCartPopup(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Padding(
-            padding: EdgeInsets.fromLTRB(24.w, 34.h, 24.w, 24.h),
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset('assets/images/tick-circle.png'),
-                  SizedBox(height: 24.h,),
-
-                  Text('Added to cart',style: headline600Big,),
-SizedBox(height: 16.h,),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      KButton(
-                        text: 'BACK EXPLORE',
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const DiscoverShoes()));
-                        },
-                        foregroundColor: buttonBackground,
-                        backgroundColor: buttonForeground,
-                        height: 52.h,
-                        width: 156.w,
-                      ),
-                      KButton(
-                        text: 'TO CART',
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ShoppingCartScreen()));
-                        },
-                        height: 52.h,
-                        width: 156.w,
-                      )
-                    ],
-                  )
-            ]
-            )
-        );
-
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     Provider.of<CartProvider>(context);
 
     return Scaffold(
-      appBar: KAppBar(hasTrailing: true, onTrailingTap: () {}),
+      appBar: KAppBar(
+          hasTrailing: true,
+          onTrailingTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const ShoppingCartScreen()))),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0.w),
@@ -229,11 +58,14 @@ SizedBox(height: 16.h,),
               _buildDescription(),
               SizedBox(height: 20.h),
               _buildReviews(widget.shoe),
-              _buildAllReviewButton(onPressed: () {Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                       ReviewScreen(shoe: widget.shoe,)));}),
+              _buildAllReviewButton(onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReviewScreen(
+                              shoe: widget.shoe,
+                            )));
+              }),
               SizedBox(height: 20.h),
             ],
           ),
@@ -303,7 +135,7 @@ SizedBox(height: 16.h,),
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(shoe.name, style: bodyText700Medium),
+        Text(shoe.name, style: bodyTextW700F20Dark),
         SizedBox(height: 10.h),
         Row(
           children: [
@@ -316,7 +148,7 @@ SizedBox(height: 16.h,),
             SizedBox(width: 5.w),
             Text(
               '(${shoe.reviewCount} Reviews)',
-              style: headline600small,
+              style: headlineW600F16,
             ),
           ],
         ),
@@ -346,7 +178,7 @@ SizedBox(height: 16.h,),
                   padding: EdgeInsets.all(8.w),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color(int.parse(colors[index])),
+                    color: ColorUtil.getColorFromString(colors[index]),
                   ),
                   width: 20.w,
                   height: 20.w,
@@ -384,7 +216,7 @@ SizedBox(height: 16.h,),
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Size', style: headline600small),
+        Text('Size', style: headlineW600F16),
         SizedBox(height: 10.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -405,9 +237,8 @@ SizedBox(height: 16.h,),
                     color: isSelected ? buttonBackground : borderLight,
                   ),
                 ),
-                child: Text(
-                    sizes[index].toStringAsFixed(index % 2 == 0 ? 0 : 1),
-                    style: bodyText700SmallLight.copyWith(
+                child: Text(StringUtil.formatSize(sizes[index], index),
+                    style: bodyTextW700F14Light.copyWith(
                         color:
                             isSelected ? buttonForeground : buttonBackground)),
               ),
@@ -422,12 +253,15 @@ SizedBox(height: 16.h,),
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Description', style: headline600small),
+        Text('Description', style: headlineW600F16),
         SizedBox(height: 10.h),
-        Text(
-          widget.shoe.description,
-          overflow: TextOverflow.ellipsis,
-          style: bodyText400LightMedium,
+        Wrap(
+          children: [
+            Text(
+              widget.shoe.description,
+              style: bodyTextW400F14Light,
+            ),
+          ],
         ),
       ],
     );
@@ -437,7 +271,7 @@ SizedBox(height: 16.h,),
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Reviews (${shoe.reviews.length})', style: headline600small),
+        Text('Reviews (${shoe.reviews.length})', style: headlineW600F16),
         SizedBox(height: 10.h),
         ...shoe.reviews.map((review) {
           return Column(
@@ -487,8 +321,8 @@ SizedBox(height: 16.h,),
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Price', style: bodyText400Light),
-                Text('\$${shoe.price}', style: bodyText700Medium),
+                Text('Price', style: bodyTextW400F12Light),
+                Text('\$${shoe.price}', style: bodyTextW700F20Dark),
               ],
             ),
             KButton(
@@ -517,9 +351,206 @@ SizedBox(height: 16.h,),
         onPressed: onPressed,
         child: Text(
           'SEE ALL REVIEW',
-          style: bodyText700Small,
+          style: bodyTextW700F14Dark,
         ),
       ),
+    );
+  }
+
+  void _showAddToCartPopup(BuildContext context) {
+    int selectedQuantity = 1; // Initial quantity
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.fromLTRB(24.w, 34.h, 24.w, 24.h),
+          child: Consumer<CartProvider>(
+            builder: (context, cartProvider, _) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Add to Cart', style: bodyTextW700F20Dark),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.close))
+                    ],
+                  ),
+                  SizedBox(height: 24.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Quantity',
+                              style: bodyTextW700F14Dark,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 60.w,
+                            height: 40.h,
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: TextField(
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.number,
+                                controller: TextEditingController(
+                                    text: selectedQuantity.toString()),
+                                onChanged: (value) {
+                                  if (int.tryParse(value) != null) {
+                                    selectedQuantity = int.parse(value);
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.remove_circle_outline,
+                                color: secondaryBackground2, size: 24.sp),
+                            onPressed: () {
+                              if (selectedQuantity > 1) {
+                                selectedQuantity--;
+                                (context as Element).markNeedsBuild();
+                              }
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.add_circle_outline, size: 24.sp),
+                            onPressed: () {
+                              selectedQuantity++;
+                              (context as Element).markNeedsBuild();
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 24.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Total Price',
+                            style: bodyTextW400F12Light,
+                          ),
+                          Text(
+                            '\$${(widget.shoe.price * selectedQuantity).toStringAsFixed(2)}',
+                            style: bodyTextW700F20Dark,
+                          ),
+                        ],
+                      ),
+                      KButton(
+                        text: 'ADD TO CART',
+                        onPressed: () {
+                          final shoe = widget.shoe;
+                          cartProvider.addToCart(CartItemModel(
+                              image: shoe.images.first,
+                              size: StringUtil.formatSize(
+                                  shoe.sizes[_selectedSizeIndex],
+                                  _selectedSizeIndex),
+                              name: shoe.name,
+                              brand: shoe.brand,
+                              color: shoe.colors[_selectedColorIndex],
+                              price: shoe.price,
+                              quantity: selectedQuantity));
+                          Navigator.pop(context);
+                          _showAddedToCartPopup(context, selectedQuantity);
+                        },
+                        height: 52.h,
+                        width: 156.w,
+                      ),
+                    ],
+                  )
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAddedToCartPopup(BuildContext context, int quantity) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+            padding: EdgeInsets.fromLTRB(24.w, 34.h, 24.w, 24.h),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/tick-circle.png'),
+                  SizedBox(
+                    height: 24.h,
+                  ),
+                  Text(
+                    'Added to cart',
+                    style: headlineW600F24,
+                  ),
+                  Text(
+                    '$quantity Item total',
+                    style: bodyTextW400F12Light,
+                  ),
+                  SizedBox(
+                    height: 16.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      KButton(
+                        text: 'BACK EXPLORE',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const DiscoverShoes()));
+                        },
+                        foregroundColor: buttonBackground,
+                        backgroundColor: buttonForeground,
+                        height: 52.h,
+                        width: 156.w,
+                      ),
+                      KButton(
+                        text: 'TO CART',
+                        onPressed: () {
+                          Navigator.pop(context);
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ShoppingCartScreen()));
+                        },
+                        height: 52.h,
+                        width: 156.w,
+                      )
+                    ],
+                  )
+                ]));
+      },
     );
   }
 }
