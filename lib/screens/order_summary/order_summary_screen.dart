@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:shoe_commerce/global_widgets/k_bottom_bar.dart';
 import '../../const/color.dart';
 import '../../const/text_style.dart';
 import '../../global_widgets/kappbar.dart';
 import '../../model/cart_item.dart';
+import '../../provider/order_provider.dart';
 
 class OrderSummaryScreen extends StatelessWidget {
   final List<CartItemModel> orders;
-  final String totalPrice;
+  final double totalPrice;
   const OrderSummaryScreen(
       {super.key, required this.orders, required this.totalPrice});
 
@@ -19,9 +21,12 @@ class OrderSummaryScreen extends StatelessWidget {
         color: primary,
         child: KBottomBar(
           labelText: 'Grand Total',
-          valueText: totalPrice,
+          valueText: '\$${(totalPrice + 20.00).toStringAsFixed(2)}',
           buttonText: 'PAYMENT',
-          onButtonPressed: () {},
+          onButtonPressed: () async{
+            await Provider.of<OrderProvider>(context, listen: false).addOrder(orders, totalPrice);
+
+          },
         ),
       ),
       appBar: const KAppBar(
@@ -90,7 +95,7 @@ class OrderSummaryScreen extends StatelessWidget {
               ),
             ],
           ),
-          Text('\$${order.price}', style: bodyTextW700F14Dark),
+          Text('\$${order.price.toStringAsFixed(2)}', style: bodyTextW700F14Dark),
         ],
       ),
     );
@@ -106,9 +111,9 @@ class OrderSummaryScreen extends StatelessWidget {
   Widget _buildPaymentDetail() {
     return Column(
       children: [
-        _buildPaymentRow('Sub Total', 705.00),
+        _buildPaymentRow('Sub Total', totalPrice),
         _buildPaymentRow('Shipping', 20.00),
-        _buildPaymentRow('Total Order', 725.00),
+        _buildPaymentRow('Total Order', totalPrice + 20.00),
       ],
     );
   }
@@ -120,7 +125,7 @@ class OrderSummaryScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(title, style: bodyTextW400F14LightDark),
-          Text('\$$amount', style: headlineW600F16),
+          Text('\$${amount.toStringAsFixed(2)}', style: headlineW600F16),
         ],
       ),
     );

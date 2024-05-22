@@ -76,7 +76,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
           color: primary,
           child: KBottomBar(
               labelText: 'Price',
-              valueText: widget.shoe.price.toString(),
+              valueText: widget.shoe.price.toStringAsFixed(2),
               buttonText: 'ADD TO CART',
               onButtonPressed: () => _showAddToCartPopup(context))),
     );
@@ -430,7 +430,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 _selectedSizeIndex),
                             name: shoe.name,
                             brand: shoe.brand,
-                            color: shoe.colors[_selectedColorIndex],
+                            color: StringUtil.capitalizeFirstLetter(shoe.colors[_selectedColorIndex]),
                             price: shoe.price,
                             quantity: selectedQuantity));
                         Navigator.pop(context);

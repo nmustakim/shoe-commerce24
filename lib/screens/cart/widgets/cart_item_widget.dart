@@ -43,7 +43,7 @@ class CartItemWidget extends StatelessWidget {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  '${cartItem.brand} ${cartItem.color} . ${cartItem.size}',
+                  '${cartItem.brand} ${cartItem.color} ${cartItem.size}',
                   style: bodyTextW400F12Light.copyWith(color: const Color(0XFF666666)),
                 ),
                 SizedBox(height: 4.h),
@@ -51,7 +51,7 @@ class CartItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$${cartItem.price}',
+                      '\$${cartItem.price.toStringAsFixed(2)}',
                       style: bodyTextW700F14Dark,
                     ),
                     SizedBox(

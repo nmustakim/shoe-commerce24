@@ -47,13 +47,12 @@ class ShoppingCartScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: primary,
-
+        color:  primary,
         elevation: 1,
         child: KBottomBar(labelText: 'Grand Total', valueText: '\$${cartProvider.totalPrice.toStringAsFixed(2)}', buttonText: 'CHECK OUT', onButtonPressed: ()=>    Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>  OrderSummaryScreen(orders:cartProvider.items,totalPrice:cartProvider.totalPrice.toStringAsFixed(2) ,),
+            builder: (context) =>  OrderSummaryScreen(orders:cartProvider.items,totalPrice:cartProvider.totalPrice ,),
           ),
         )),
       ),
