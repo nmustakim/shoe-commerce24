@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shoe_commerce/global_widgets/k_star-filled.dart';
+import 'package:shoe_commerce/global_widgets/k_star_blank.dart';
 
 class RatingStars extends StatelessWidget {
   final double rating;
@@ -12,13 +13,19 @@ class RatingStars extends StatelessWidget {
     List<Widget> starWidgets = [];
 
     for (int i = 0; i < numberOfStars; i++) {
-      starWidgets.add(Icon(Icons.star, color: Colors.yellow, size: 16.sp));
+      starWidgets.add(
+     const KStarFilled()
+      );
     }
 
     if (rating - numberOfStars >= 0.5) {
-      starWidgets.add(Icon(Icons.star_half, color: Colors.yellow, size: 16.sp));
+      starWidgets.add(
+        const KStarBlank()
+      );
     }
 
-    return Row(children: starWidgets);
+    return Row(
+
+        children: starWidgets);
   }
 }

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/text_style.dart';
+import 'package:shoe_commerce/global_widgets/k_star-filled.dart';
 
-import '../../../model/shoe.dart';
+import '../../../models/shoe.dart';
 
 class ShoeCard extends StatelessWidget {
   final Shoe shoe;
@@ -31,13 +32,16 @@ class ShoeCard extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: Container(
                         margin: EdgeInsets.only(bottom: 8.h),
-                        child: Image.network(shoe.images.first,width: 120.w,fit: BoxFit.fitWidth, )),
+                        child: Image.network(
+                          shoe.images.first,
+                          width: 120.w,
+                          fit: BoxFit.fitWidth,
+                        )),
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left:20.w,top: 16.h ),
+                    padding: EdgeInsets.only(left: 20.w, top: 16.h),
                     child: Image.network(shoe.logo))
-
               ],
             ),
           ),
@@ -58,10 +62,7 @@ class ShoeCard extends StatelessWidget {
             margin: EdgeInsets.only(left: 6.w),
             child: Row(
               children: [
-                Icon(Icons.star, color: Colors.yellow, size: 16.sp),
-                SizedBox(
-                  width: 4.w,
-                ),
+        const KStarFilled(),
                 Text.rich(
                   TextSpan(
                     children: [
@@ -84,7 +85,8 @@ class ShoeCard extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.only(left: 8.w),
               child: Text('\$${shoe.price.toStringAsFixed(2)}',
-                  style: bodyTextW400F12Dark.copyWith(fontWeight: FontWeight.w700)),
+                  style: bodyTextW400F12Dark.copyWith(
+                      fontWeight: FontWeight.w700)),
             ),
           ),
         ],

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import '../model/shoe.dart';
+import '../models/shoe.dart';
 
 class ShoesService {
   final CollectionReference _brandsCollection;

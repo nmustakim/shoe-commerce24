@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import '../model/cart_item.dart';
+import '../models/cart_item.dart';
 
 class OrderService {
   final CollectionReference _ordersCollection =

@@ -1,15 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/text_style.dart';
-import 'package:shoe_commerce/global_widgets/kappbar.dart';
+import 'package:shoe_commerce/global_widgets/k_appbar.dart';
 import 'package:shoe_commerce/screens/cart/cart_screen.dart';
+import 'package:shoe_commerce/screens/discover_shoes/shimmer_card.dart';
 import 'package:shoe_commerce/screens/discover_shoes/widgets/shoe_card.dart';
 import 'package:shoe_commerce/screens/filter_screen.dart';
 import 'package:shoe_commerce/screens/product_details/priduct_details_screen.dart';
-import '../../model/shoe.dart';
-import '../../provider/shoes_provider.dart';
+import '../../models/shoe.dart';
+import '../../providers/review_provider.dart';
+import '../../providers/shoes_provider.dart';
 
 class DiscoverShoes extends StatefulWidget {
   const DiscoverShoes({super.key});
@@ -43,6 +46,8 @@ class DiscoverShoesState extends State<DiscoverShoes> {
 
   @override
   Widget build(BuildContext context) {
+    final shoesProvider = Provider.of<ShoesProvider>(context);
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: Colors.white,
@@ -67,9 +72,7 @@ class DiscoverShoesState extends State<DiscoverShoes> {
               _verticalSpacing(16),
               Expanded(
                 child: shoesProvider.isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
+                    ? _buildShimmerGrid(8)
                     : shoesProvider.shoes.isEmpty
                         ? Center(
                             child: Text(
@@ -88,25 +91,28 @@ class DiscoverShoesState extends State<DiscoverShoes> {
                             itemBuilder: (context, index) {
                               final Shoe shoe = shoesProvider.shoes[index];
                               return ShoeCard(
-                                onTap: () => Navigator.push(
+                                onTap: () {
+                                  Provider.of<ReviewProvider>(context, listen: false).fetchTop3Reviews(shoe.id);
+                                  Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         ProductDetailsScreen(shoe: shoe),
                                   ),
-                                ),
+                                );
+    },
                                 shoe: shoesProvider.shoes[index],
                               );
                             },
                           ),
               ),
               if (shoesProvider.isFetchingMore)
-                const Center(child: CircularProgressIndicator()),
+               const CupertinoActivityIndicator()
             ],
           ),
         ),
       ),
-      floatingActionButton: _buildFloatingActionButton(context),
+      floatingActionButton: _buildFloatingActionButton(context,shoesProvider),
     );
   }
 
@@ -119,7 +125,7 @@ class DiscoverShoesState extends State<DiscoverShoes> {
           bool isSelected = index == shoesProvider.selectedIndex;
           return GestureDetector(
             onTap: () {
-              shoesProvider.setSelectedIndex(index);
+              shoesProvider.setSelectedBrand(index, true);
             },
             child: Row(
               children: [
@@ -139,11 +145,11 @@ class DiscoverShoesState extends State<DiscoverShoes> {
     );
   }
 
-  Widget _buildFloatingActionButton(BuildContext context) {
+  Widget _buildFloatingActionButton(BuildContext context,ShoesProvider shoesProvider) {
     return InkWell(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const FilterScreen()),
+        MaterialPageRoute(builder: (context) =>  FilterScreen(selectedBrand: shoesProvider.selectedBrand)),
       ),
       child: Container(
         height: 40.h,
@@ -168,6 +174,20 @@ class DiscoverShoesState extends State<DiscoverShoes> {
       ),
     );
   }
+
+  Widget _buildShimmerGrid(int itemCount) {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.71111
+      ),
+      itemCount: itemCount,
+      itemBuilder: (context, index) {
+        return const ShoeCardShimmer();
+      },
+    );
+  }
+
 
   Widget _verticalSpacing(double height) {
     return SizedBox(height: height.h);

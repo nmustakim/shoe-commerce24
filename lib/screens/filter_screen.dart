@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:shoe_commerce/global_widgets/kappbar.dart';
+import 'package:shoe_commerce/global_widgets/k_appbar.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
 import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
 
 import '../const/color.dart';
 import '../const/text_style.dart';
-import '../provider/shoes_provider.dart';
+import '../providers/shoes_provider.dart';
 
 class FilterScreen extends StatefulWidget {
-  const FilterScreen({super.key});
+  final String selectedBrand;
+
+  const FilterScreen({super.key, required this.selectedBrand});
 
   @override
   FilterScreenState createState() => FilterScreenState();
 }
 
 class FilterScreenState extends State<FilterScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _selectedBrand = widget.selectedBrand;
+  }
+
   double _minPrice = 200;
   double _maxPrice = 300;
   String _selectedBrand = '';
@@ -47,19 +55,22 @@ class FilterScreenState extends State<FilterScreen> {
             SizedBox(height: 34.h),
             Text('Price Range', style: headlineW600F16),
             SizedBox(height: 20.h),
-            RangeSlider(
-              values: RangeValues(_minPrice, _maxPrice),
-              min: 0,
-              max: 1750,
-              divisions: 35,
-              labels: RangeLabels(
-                  '\$${_minPrice.round()}', '\$${_maxPrice.round()}'),
-              onChanged: (RangeValues values) {
-                setState(() {
-                  _minPrice = values.start;
-                  _maxPrice = values.end;
-                });
-              },
+            SliderTheme(
+              child: RangeSlider(
+                
+                values: RangeValues(_minPrice, _maxPrice),
+                min: 0,
+                max: 1750,
+                divisions: 35,
+                labels: RangeLabels(
+                    '\$${_minPrice.round()}', '\$${_maxPrice.round()}'),
+                onChanged: (RangeValues values) {
+                  setState(() {
+                    _minPrice = values.start;
+                    _maxPrice = values.end;
+                  });
+                },
+              ),
             ),
             SizedBox(height: 34.h),
             Text('Sort By', style: headlineW600F16),
@@ -108,44 +119,40 @@ class FilterScreenState extends State<FilterScreen> {
             },
             height: 50.h,
             width: 150.w),
-        Consumer<ShoesProvider>(
-          builder: (_,shoesProvider,child){
+        Consumer<ShoesProvider>(builder: (_, shoesProvider, child) {
           return KButton(
-              text:shoesProvider.isLoading? 'Applying...':'APPLY',
-              onPressed: shoesProvider.isLoading?(){}:() {
-
-               shoesProvider.fetchShoesByFilter(
-                  brand: _selectedBrand,
-                  minPrice: _minPrice,
-                  maxPrice: _maxPrice,
-                  sortBy: _sortBy,
-                  gender: _gender,
-                  colors: _colors,
-                );
-
-               WidgetsBinding.instance.addPostFrameCallback((_) {
-                 Navigator.push(
-                   context,
-                   MaterialPageRoute(builder: (context) => const DiscoverShoes()),
-                 );
-               });
-
-              },
+              text: shoesProvider.isLoading ? 'Applying...' : 'APPLY',
+              onPressed: shoesProvider.isLoading
+                  ? () {}
+                  : () {
+                      shoesProvider.fetchShoesByFilter(
+                        brand: _selectedBrand,
+                        minPrice: _minPrice,
+                        maxPrice: _maxPrice,
+                        sortBy: _sortBy,
+                        gender: _gender,
+                        colors: _colors,
+                      );
+                      shoesProvider.setSelectedBrand(
+                          shoesProvider.categories.indexOf(_selectedBrand),
+                          false);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const DiscoverShoes()),
+                        );
+                      });
+                    },
               height: 50.h,
-              width: 150.h);}
-        )
+              width: 150.h);
+        })
       ],
     );
   }
 
   List<Widget> _buildBrandButtons() {
-    List<String> brands = [
-
-          'Nike',
-      'Puma',
-      'Adidas',
-      'Reebok'
-    ];
+    List<String> brands = ['Nike', 'Jordan', 'Adidas', 'Reebok'];
     return brands.map((brand) {
       return GestureDetector(
         onTap: () {

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../model/shoe.dart';
+import '../models/shoe.dart';
 import '../services/shoe_service.dart';
 
 class ShoesProvider extends ChangeNotifier {
@@ -9,10 +9,11 @@ class ShoesProvider extends ChangeNotifier {
   final ShoesService _shoesService;
   List<Shoe> _shoes = [];
   List<String> categories = ["All", "Nike", "Jordan", "Adidas", "Reebok"];
+  String _selectedBrand = "All";
   bool _isLoading = false;
 
   String? _error;
-  int _selectedIndex = 0;
+  int _selectedBrandIndex = 0;
   bool _isFetchingMore = false;
   DocumentSnapshot? _lastBrandDocument;
   DocumentSnapshot? _lastShoeDocument;
@@ -28,7 +29,8 @@ class ShoesProvider extends ChangeNotifier {
   bool get isFetchingMore => _isFetchingMore;
 
   String? get error => _error;
-  int get selectedIndex => _selectedIndex;
+  int get selectedIndex => _selectedBrandIndex;
+  String get selectedBrand => _selectedBrand;
 
   Future<void> fetchShoes() async {
     _isLoading = true;
@@ -36,13 +38,14 @@ class ShoesProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final category = categories[_selectedIndex];
+      final category = categories[_selectedBrandIndex];
       final result = category == "All"
           ? await _shoesService.getShoes()
           : await _shoesService.getBrandShoes(category);
       _shoes = result.shoes;
       _lastBrandDocument = result.lastBrandDocument;
       _lastShoeDocument = result.lastShoeDocument;
+
     } catch (e) {
       _error = 'Error fetching shoes: $e';
     } finally {
@@ -57,7 +60,7 @@ class ShoesProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final category = categories[_selectedIndex];
+      final category = categories[_selectedBrandIndex];
       final result = category == "All"
           ? await _shoesService.getMoreShoes(_lastBrandDocument!, _lastShoeDocument!)
           : await _shoesService.getMoreBrandShoes(category, _lastBrandDocument!);
@@ -108,10 +111,16 @@ class ShoesProvider extends ChangeNotifier {
   }
 
 
-  void setSelectedIndex(int index) {
-    _selectedIndex = index;
-    fetchShoes();
+  void setSelectedBrand(int index,bool isFromDiscover) {
+    _selectedBrandIndex = index;
+    _selectedBrand = categories[index];
+    if(isFromDiscover){
+      fetchShoes();
+
+    }
+
     notifyListeners();
   }
+
 
 }

@@ -3,9 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:shoe_commerce/provider/cart_provider.dart';
-import 'package:shoe_commerce/provider/order_provider.dart';
-import 'package:shoe_commerce/provider/shoes_provider.dart';
+import 'package:shoe_commerce/providers/cart_provider.dart';
+import 'package:shoe_commerce/providers/order_provider.dart';
+import 'package:shoe_commerce/providers/review_provider.dart';
+import 'package:shoe_commerce/providers/shoes_provider.dart';
 import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
 import 'package:shoe_commerce/services/shoe_service.dart';
 
@@ -28,7 +29,10 @@ Future<void> main() async {
               CartProvider()),
         ChangeNotifierProvider(
             create: (BuildContext context) =>
-                OrderProvider())
+                OrderProvider()),
+        ChangeNotifierProvider(
+            create: (BuildContext context) =>
+                ReviewProvider())
     ],
       child: const ShoeCommerce()),
   );

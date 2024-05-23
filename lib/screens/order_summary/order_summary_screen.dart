@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:shoe_commerce/global_widgets/k_bottom_bar.dart';
 import '../../const/color.dart';
 import '../../const/text_style.dart';
-import '../../global_widgets/kappbar.dart';
-import '../../model/cart_item.dart';
-import '../../provider/order_provider.dart';
+import '../../global_widgets/k_appbar.dart';
+import '../../models/cart_item.dart';
+import '../../providers/order_provider.dart';
 
 class OrderSummaryScreen extends StatelessWidget {
   final List<CartItemModel> orders;

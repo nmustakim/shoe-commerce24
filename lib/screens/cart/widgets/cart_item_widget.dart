@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/text_style.dart';
-import 'package:shoe_commerce/model/cart_item.dart';
+import 'package:shoe_commerce/models/cart_item.dart';
 
 class CartItemWidget extends StatelessWidget {
   final CartItemModel cartItem;

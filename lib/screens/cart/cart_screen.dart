@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/global_widgets/k_bottom_bar.dart';
-import 'package:shoe_commerce/global_widgets/kappbar.dart';
-import 'package:shoe_commerce/provider/cart_provider.dart';
+import 'package:shoe_commerce/global_widgets/k_appbar.dart';
+import 'package:shoe_commerce/providers/cart_provider.dart';
 import 'package:shoe_commerce/screens/cart/widgets/cart_item_widget.dart';
 import 'package:shoe_commerce/screens/order_summary/order_summary_screen.dart';
 

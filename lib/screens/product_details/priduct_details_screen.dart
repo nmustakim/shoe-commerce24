@@ -1,19 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/global_widgets/k_bottom_bar.dart';
-import 'package:shoe_commerce/global_widgets/kappbar.dart';
+import 'package:shoe_commerce/global_widgets/k_appbar.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
-import 'package:shoe_commerce/model/cart_item.dart';
+import 'package:shoe_commerce/models/cart_item.dart';
 import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
-import 'package:shoe_commerce/screens/product_details/widgets.dart';
+import 'package:shoe_commerce/screens/product_details/widgets/rating_stars.dart';
 import 'package:shoe_commerce/screens/reviews/review_screen.dart';
+import 'package:shoe_commerce/screens/reviews/widget/review_shimmer.dart';
+import 'package:shoe_commerce/screens/reviews/widget/review_widget.dart';
 import 'package:shoe_commerce/util/color_util.dart';
 import 'package:shoe_commerce/util/string_util.dart';
 import '../../const/text_style.dart';
-import '../../model/shoe.dart';
-import '../../provider/cart_provider.dart';
+import '../../models/shoe.dart';
+import '../../providers/cart_provider.dart';
+import '../../providers/review_provider.dart';
 import '../cart/cart_screen.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -35,8 +39,6 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<CartProvider>(context);
-
     return Scaffold(
       appBar: KAppBar(
           hasTrailing: true,
@@ -58,16 +60,9 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
               _verticalSpacing(20),
               _buildDescription(),
               _verticalSpacing(20),
-              _buildReviews(widget.shoe),
-              _buildAllReviewButton(onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ReviewScreen(
-                              shoe: widget.shoe,
-                            )));
-              }),
-              SizedBox(height: 20.h),
+              _buildTopReviews(widget.shoe),
+              _buildAllReviewButton(),
+              _verticalSpacing(24)
             ],
           ),
         ),
@@ -251,7 +246,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Description', style: headlineW600F16),
+        Text('Description', style: headlineW600F16.copyWith(height: 1.71)),
         _verticalSpacing(10),
         Wrap(
           children: [
@@ -265,66 +260,69 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget _buildReviews(Shoe shoe) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Reviews (${shoe.reviews.length})', style: headlineW600F16),
-        _verticalSpacing(10),
-        ...shoe.reviews.map((review) {
-          return Column(
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: const NetworkImage(
-                        'https://via.placeholder.com/150'), // Placeholder image
-                    radius: 20.r,
-                  ),
-                  SizedBox(width: 10.w),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(review.userId,
-                          style: TextStyle(
-                              fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                      Row(
-                        children: List.generate(review.rating, (index) {
-                          return Icon(Icons.star,
-                              color: Colors.yellow, size: 16.sp);
-                        }),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              _verticalSpacing(5),
-              Text(review.comment, style: TextStyle(fontSize: 14.sp)),
-              const Divider(),
-            ],
-          );
-        }),
-      ],
+  Widget _buildTopReviews(Shoe shoe) {
+    return Consumer<ReviewProvider>(
+      builder: (context, reviewProvider, child) {
+        if (reviewProvider.isFetchingTop) {
+          return const ReviewShimmerLoadingList(itemCount: 3);
+        }
+
+        if (reviewProvider.topReviews.isEmpty) {
+          return Text('No reviews yet.', style: bodyTextW400F14Light);
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Review (${reviewProvider.topReviews.length})',
+                style: headlineW600F16),
+            _verticalSpacing(10),
+            ...reviewProvider.topReviews.map((review) {
+              return buildReviewItem(review);
+            }),
+          ],
+        );
+      },
     );
   }
 
-  Widget _buildAllReviewButton({required VoidCallback onPressed}) {
+  Widget _buildAllReviewButton() {
     return SizedBox(
       width: double.infinity,
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: buttonBackground,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: secondaryBackground1),
-            borderRadius: BorderRadius.circular(100.r),
+      child: Consumer<ReviewProvider>(builder: (_, reviewProvider, child) {
+        return OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            foregroundColor:  reviewProvider.isLoading?secondaryBackground2:buttonBackground,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: secondaryBackground1),
+              borderRadius: BorderRadius.circular(100.r),
+            ),
           ),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          'SEE ALL REVIEW',
-          style: bodyTextW700F14Dark,
-        ),
-      ),
+          onPressed: reviewProvider.isLoading
+              ? () {}
+              : () async {
+                  await reviewProvider
+                      .fetchReviews(widget.shoe.id)
+                      .then((value) => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ReviewScreen(
+                                    shoe: widget.shoe,
+                                  ))));
+                },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if(reviewProvider.isLoading)
+                Container(margin:EdgeInsets.only(right: 24.w),child: const CupertinoActivityIndicator()),
+              Text(
+                reviewProvider.isLoading?'Loading...':'SEE ALL REVIEW',
+                style: bodyTextW700F14Dark,
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -430,7 +428,8 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 _selectedSizeIndex),
                             name: shoe.name,
                             brand: shoe.brand,
-                            color: StringUtil.capitalizeFirstLetter(shoe.colors[_selectedColorIndex]),
+                            color: StringUtil.capitalizeFirstLetter(
+                                shoe.colors[_selectedColorIndex]),
                             price: shoe.price,
                             quantity: selectedQuantity));
                         Navigator.pop(context);

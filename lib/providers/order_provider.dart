@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:shoe_commerce/provider/cart_provider.dart';
+import 'package:shoe_commerce/providers/cart_provider.dart';
 import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
 
-import '../model/cart_item.dart';
+import '../models/cart_item.dart';
 import '../services/order_service.dart';
 
 class OrderProvider with ChangeNotifier {

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoe_commerce/const/color.dart';
 
 
 
@@ -11,13 +12,21 @@ import 'package:google_fonts/google_fonts.dart';
 final headlineW700F30 =
 GoogleFonts.urbanist(fontSize: 30.sp, fontWeight: FontWeight.w700);
 
+final headlineW700F20Dark =
+GoogleFonts.urbanist(fontSize: 20.sp, fontWeight: FontWeight.w700,color:buttonBackground);
+
+final headlineW700F20Light =
+GoogleFonts.urbanist(fontSize: 20.sp, fontWeight: FontWeight.w700,color:secondaryBackground2);
+
+
+final headlineW700F18Dark =
+GoogleFonts.urbanist(fontSize: 18.sp, fontWeight: FontWeight.w700,color:const Color(0XFF160700));
+
+
 final headlineW600F24 = GoogleFonts.urbanist(
   fontSize: 24.sp,
   fontWeight: FontWeight.w600,
 );
-final headlineW700F18Dark =
-GoogleFonts.urbanist(fontSize: 18.sp, fontWeight: FontWeight.w700,color:const Color(0XFF160700));
-
 final headlineW600F20 = GoogleFonts.urbanist(
   fontSize: 20.sp,
   fontWeight: FontWeight.w600,
