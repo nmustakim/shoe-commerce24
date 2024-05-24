@@ -7,7 +7,8 @@ import 'package:shoe_commerce/providers/cart_provider.dart';
 import 'package:shoe_commerce/providers/order_provider.dart';
 import 'package:shoe_commerce/providers/review_provider.dart';
 import 'package:shoe_commerce/providers/shoes_provider.dart';
-import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
+import 'package:shoe_commerce/routes.dart';
+import 'package:shoe_commerce/services/navigation_service.dart';
 import 'package:shoe_commerce/services/shoe_service.dart';
 
 import 'firebase_options.dart';
@@ -48,11 +49,14 @@ class ShoeCommerce extends StatelessWidget {
         minTextAdapt: true,
         builder: (_, child) {
           return  MaterialApp(
-            
+
+            navigatorKey: NavigationService.navigatorKey,
+            initialRoute: AppRoutes.discoverShoes,
+            routes: AppRoutes.generateRoutes,
             theme: ThemeData(
             ),
             debugShowCheckedModeBanner: false,
-            home: const DiscoverShoes(),
+
           );
         });
   }

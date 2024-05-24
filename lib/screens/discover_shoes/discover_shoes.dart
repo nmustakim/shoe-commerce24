@@ -6,14 +6,14 @@ import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/img_asset.dart';
 import 'package:shoe_commerce/const/text_style.dart';
 import 'package:shoe_commerce/global_widgets/k_appbar.dart';
-import 'package:shoe_commerce/screens/cart/cart_screen.dart';
+import 'package:shoe_commerce/routes.dart';
 import 'package:shoe_commerce/screens/discover_shoes/shimmer_card.dart';
 import 'package:shoe_commerce/screens/discover_shoes/widgets/shoe_card.dart';
-import 'package:shoe_commerce/screens/filter_screen/filter_screen.dart';
 import 'package:shoe_commerce/screens/product_details/priduct_details_screen.dart';
 import '../../models/shoe.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/shoes_provider.dart';
+import '../../services/navigation_service.dart';
 
 class DiscoverShoes extends StatefulWidget {
   const DiscoverShoes({super.key});
@@ -57,11 +57,9 @@ class DiscoverShoesState extends State<DiscoverShoes> {
         hasTitle: true,
         title: 'Discover',
         hasTrailing: true,
-        onTrailingTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const ShoppingCartScreen()),
-        ),
-      ),
+        onTrailingTap:  () => NavigationService.navigateToNamedRoute(AppRoutes.cartScreen),
+
+    ),
       body: Consumer<ShoesProvider>(
         builder: (context, shoesProvider, child) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0.w),
@@ -154,12 +152,9 @@ class DiscoverShoesState extends State<DiscoverShoes> {
   Widget _buildFloatingActionButton(
       BuildContext context, ShoesProvider shoesProvider) {
     return InkWell(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                FilterScreen(selectedBrand: shoesProvider.selectedBrand)),
-      ),
+      onTap: () => NavigationService.navigateToNamedRoute(
+      AppRoutes.filterScreen,
+      arguments: {'selectedBrand': shoesProvider.selectedBrand},),
       child:
           SvgPicture.asset(
             ImageAsset.filterIcon,

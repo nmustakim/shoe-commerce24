@@ -29,7 +29,6 @@ class CartItemWidget extends StatelessWidget {
 
       background: Container(alignment:Alignment.centerRight,child: SvgPicture.asset(ImageAsset.deleteIcon)),
       confirmDismiss: (direction) async {
-        // Confirm delete action
         return await showDialog(
           context: context,
           builder: (BuildContext context) {
