@@ -62,9 +62,12 @@ class FilterScreenState extends State<FilterScreen> {
             Text('Price Range', style: headlineW600F16),
             SizedBox(height: 20.h),
 
-
             FlutterSlider(
-              values: [ _minPrice, _maxPrice ],
+              trackBar: FlutterSliderTrackBar(
+                activeTrackBar: BoxDecoration(color: buttonBackground),
+                inactiveTrackBar: BoxDecoration(color: secondaryBackground3),
+              ),
+              values: [_minPrice, _maxPrice],
               min: 0,
               max: 1750,
               rangeSlider: true,
@@ -74,20 +77,22 @@ class FilterScreenState extends State<FilterScreen> {
                   _maxPrice = upperValue;
                 });
               },
-
               handler: FlutterSliderHandler(
-
-                decoration: BoxDecoration(),
-                child: Material(
-                  type: MaterialType.canvas,
-                  elevation: 3,
-                  child: Container(
-                      padding: EdgeInsets.only(bottom:4),
-                      child: Image.asset(ImageAsset.thumb)),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
                 ),
+                child: Image.asset(ImageAsset.thumb),
+              ),
+              rightHandler: FlutterSliderHandler(
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
 
+                ),
+                child: Image.asset(ImageAsset.thumb),
               ),
             ),
+
+
             SizedBox(height: 34.h),
             Text('Sort By', style: headlineW600F16),
             SizedBox(height: 20.h),
