@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
+import 'package:shoe_commerce/const/img_asset.dart';
 import 'package:shoe_commerce/const/text_style.dart';
 import 'package:shoe_commerce/global_widgets/k_appbar.dart';
 import 'package:shoe_commerce/screens/cart/cart_screen.dart';
@@ -162,7 +163,7 @@ class DiscoverShoesState extends State<DiscoverShoes> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/filter_icon.png'),
+              Image.asset(ImageAsset.filterIcon),
               _horizontalSpacing(8),
               Text(
                 'FILTER',

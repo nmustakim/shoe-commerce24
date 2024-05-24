@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shoe_commerce/const/img_asset.dart';
 
 class KStarFilled extends StatelessWidget {
   final bool isBigStar;
@@ -10,7 +11,7 @@ class KStarFilled extends StatelessWidget {
     return Container(
         margin: EdgeInsets.only(right: 4.w),
         child: Image.asset(
-          'assets/images/star-filled.png',
+          ImageAsset.starFilled,
           height: isBigStar?20.h:12.h,
           width:isBigStar?20.w: 12.w,
         ));

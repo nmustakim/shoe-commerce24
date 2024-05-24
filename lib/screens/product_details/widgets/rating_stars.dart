@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shoe_commerce/global_widgets/k_star-filled.dart';
-import 'package:shoe_commerce/global_widgets/k_star_blank.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../const/img_asset.dart';
 
 class RatingStars extends StatelessWidget {
   final double rating;
@@ -9,23 +10,20 @@ class RatingStars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int numberOfStars = rating.floor();
-    List<Widget> starWidgets = [];
-
-    for (int i = 0; i < numberOfStars; i++) {
-      starWidgets.add(
-     const KStarFilled()
-      );
-    }
-
-    if (rating - numberOfStars >= 0.5) {
-      starWidgets.add(
-        const KStarBlank()
-      );
-    }
-
     return Row(
-
-        children: starWidgets);
+      children: List.generate(
+        5,
+        (index) {
+          return Container(
+            margin: EdgeInsets.only(right: 4.w),
+            child: Image.asset(
+              index < rating ? ImageAsset.starFilled : ImageAsset.starBlank,
+              height: 12.h,
+              width: 12.w,
+            ),
+          );
+        },
+      ),
+    );
   }
 }

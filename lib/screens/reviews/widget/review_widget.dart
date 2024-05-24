@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shoe_commerce/const/text_style.dart';
 
+import '../../../const/img_asset.dart';
 import '../../../models/review.dart';
 import '../../../util/string_util.dart';
 
@@ -14,7 +15,7 @@ Widget buildReviewItem(Review review) {
       children: [
         CircleAvatar(
           radius: 20.r,
-          backgroundImage: const AssetImage('assets/images/star-blank.png'),
+          backgroundImage:  AssetImage(ImageAsset.starBlank),
         ),
         SizedBox(width: 8.w),
         Expanded(
@@ -33,11 +34,11 @@ Widget buildReviewItem(Review review) {
                 children: List.generate(
                   5,
                       (index) {
-                    String imageString = 'assets/images';
+
                     return Container(
                       margin: EdgeInsets.only(right: 4.w),
                       child: Image.asset(
-                        '$imageString/${index < review.rating ? "star-filled.png" : "star-blank.png"}',
+                        index < review.rating ? ImageAsset.starFilled : ImageAsset.starBlank,
                         height: 12.h,
                         width: 12.w,
                       ),

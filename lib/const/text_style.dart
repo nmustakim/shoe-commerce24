@@ -62,6 +62,10 @@ final bodyTextW400F11Light = GoogleFonts.urbanist(
     color: const Color(0XFFB7B7B7));
 
 
+final bodyTextW700F11Dark =
+GoogleFonts.urbanist(fontSize: 11.sp, fontWeight: FontWeight.w700);
+
+
 
 final bodyTextW700F14Dark =
     GoogleFonts.urbanist(fontSize: 14.sp, fontWeight: FontWeight.w700);

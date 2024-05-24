@@ -34,7 +34,7 @@ class ShoeCardShimmer extends StatelessWidget {
             color: Colors.grey[300],
           ),
           SizedBox(
-            height: 4.h,
+            height: 11.h,
           ),
           Row(
             children: [

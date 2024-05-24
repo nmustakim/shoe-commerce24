@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/global_widgets/k_appbar.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
 import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
 
 import '../const/color.dart';
+import '../const/img_asset.dart';
 import '../const/text_style.dart';
 import '../providers/shoes_provider.dart';
 
@@ -14,9 +17,12 @@ class FilterScreen extends StatefulWidget {
 
   const FilterScreen({super.key, required this.selectedBrand});
 
+
   @override
   FilterScreenState createState() => FilterScreenState();
+
 }
+
 
 class FilterScreenState extends State<FilterScreen> {
   @override
@@ -55,21 +61,31 @@ class FilterScreenState extends State<FilterScreen> {
             SizedBox(height: 34.h),
             Text('Price Range', style: headlineW600F16),
             SizedBox(height: 20.h),
-            SliderTheme(
-              child: RangeSlider(
-                
-                values: RangeValues(_minPrice, _maxPrice),
-                min: 0,
-                max: 1750,
-                divisions: 35,
-                labels: RangeLabels(
-                    '\$${_minPrice.round()}', '\$${_maxPrice.round()}'),
-                onChanged: (RangeValues values) {
-                  setState(() {
-                    _minPrice = values.start;
-                    _maxPrice = values.end;
-                  });
-                },
+
+
+            FlutterSlider(
+              values: [ _minPrice, _maxPrice ],
+              min: 0,
+              max: 1750,
+              rangeSlider: true,
+              onDragging: (handlerIndex, lowerValue, upperValue) {
+                setState(() {
+                  _minPrice = lowerValue;
+                  _maxPrice = upperValue;
+                });
+              },
+
+              handler: FlutterSliderHandler(
+
+                decoration: BoxDecoration(),
+                child: Material(
+                  type: MaterialType.canvas,
+                  elevation: 3,
+                  child: Container(
+                      padding: EdgeInsets.only(bottom:4),
+                      child: Image.asset(ImageAsset.thumb)),
+                ),
+
               ),
             ),
             SizedBox(height: 34.h),
@@ -304,4 +320,5 @@ class FilterScreenState extends State<FilterScreen> {
         _colors.length - 1; // Subtract 1 to exclude the empty string in _colors
     return count;
   }
+
 }

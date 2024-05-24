@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
+import 'package:shoe_commerce/const/img_asset.dart';
 import 'package:shoe_commerce/global_widgets/k_bottom_bar.dart';
 import 'package:shoe_commerce/global_widgets/k_appbar.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
@@ -137,12 +138,12 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
             _horizontalSpacing(5),
             Text(
               shoe.averageRating.toString(),
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+              style: bodyTextW700F11Dark
             ),
             _horizontalSpacing(5),
             Text(
               '(${shoe.reviewCount} Reviews)',
-              style: headlineW600F16,
+              style: bodyTextW400F11Light,
             ),
           ],
         ),
@@ -184,7 +185,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     bottom: 0,
                     top: 0,
                     child: Image.asset(
-                      'assets/images/check.png',
+                      ImageAsset.check,
                       color: primary,
                     ),
                   )
@@ -223,6 +224,8 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 });
               },
               child: Container(
+                height: 40.h,
+                width: 40.h,
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
                   color: isSelected ? buttonBackground : primary,
@@ -454,14 +457,14 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/tick-circle.png'),
+                  Image.asset(ImageAsset.tickCircle),
                   _verticalSpacing(24),
                   Text(
                     'Added to cart',
                     style: headlineW600F24,
                   ),
                   Text(
-                    '$quantity Item total',
+                    '$quantity Item(s) total',
                     style: bodyTextW400F12Light,
                   ),
                   _verticalSpacing(12),
