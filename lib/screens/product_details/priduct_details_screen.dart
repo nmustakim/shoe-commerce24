@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/img_asset.dart';
@@ -84,7 +85,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
         Container(
           height: 315.h,
           decoration: BoxDecoration(
-              color: secondaryBackground1,
+              color: secondaryBackgroundWhite1,
               borderRadius: BorderRadius.circular(20.r)),
           child: PageView.builder(
             controller: _pageController,
@@ -112,7 +113,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: _buildDot(index == _currentPageIndex
                     ? buttonBackground
-                    : secondaryBackground2),
+                    : secondaryBackgroundWhite2),
               );
             }),
           ),
@@ -176,7 +177,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     color: ColorUtil.getColorFromString(colors[index]),
                   ),
                   width: 20.w,
-                  height: 20.w,
+                  height: 20.h,
                 ),
                 if (_selectedColorIndex == index)
                   Positioned(
@@ -184,9 +185,12 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     right: 0,
                     bottom: 0,
                     top: 0,
-                    child: Image.asset(
+                    child: SvgPicture.asset(
                       ImageAsset.check,
-                      color: primary,
+                      height: 2.4.h,
+                      width: 9.04.w,
+                      fit: BoxFit.scaleDown,
+
                     ),
                   )
                 else
@@ -226,7 +230,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: Container(
                 height: 40.h,
                 width: 40.h,
-                padding: EdgeInsets.all(8.w),
+
                 decoration: BoxDecoration(
                   color: isSelected ? buttonBackground : primary,
                   shape: BoxShape.circle,
@@ -234,9 +238,11 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     color: isSelected ? buttonBackground : borderLight,
                   ),
                 ),
-                child: Text(StringUtil.formatSize(sizes[index], index),
-                    style: bodyTextW700F14Light.copyWith(
-                        color: isSelected ? primary : buttonBackground)),
+                child: Center(
+                  child: Text(StringUtil.formatSize(sizes[index], index),
+                      style: bodyTextW700F14Light.copyWith(
+                          color: isSelected ? primary : buttonBackground)),
+                ),
               ),
             );
           }),
@@ -295,9 +301,9 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
       child: Consumer<ReviewProvider>(builder: (_, reviewProvider, child) {
         return OutlinedButton(
           style: OutlinedButton.styleFrom(
-            foregroundColor:  reviewProvider.isLoading?secondaryBackground2:buttonBackground,
+            foregroundColor:  reviewProvider.isLoading?secondaryBackgroundWhite2:buttonBackground,
             shape: RoundedRectangleBorder(
-              side: BorderSide(color: secondaryBackground1),
+              side: BorderSide(color: secondaryBackgroundWhite1),
               borderRadius: BorderRadius.circular(100.r),
             ),
           ),
@@ -397,7 +403,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         children: [
                           IconButton(
                             icon: Icon(Icons.remove_circle_outline,
-                                color: secondaryBackground2, size: 24.sp),
+                                color: secondaryBackgroundWhite2, size: 24.sp),
                             onPressed: () {
                               if (selectedQuantity > 1) {
                                 selectedQuantity--;
@@ -457,7 +463,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(ImageAsset.tickCircle),
+                  SvgPicture.asset(ImageAsset.tickCircle),
                   _verticalSpacing(24),
                   Text(
                     'Added to cart',

@@ -7,20 +7,20 @@ class KButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color? backgroundColor;
   final Color? foregroundColor;
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
   final bool? hasLeading;
 
   const KButton({
     super.key,
     required this.text,
-    required this.onPressed, this.backgroundColor, this.foregroundColor, required this.height, required this.width, this.hasLeading,
+    required this.onPressed, this.backgroundColor, this.foregroundColor,  this.height,  this.width, this.hasLeading,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height:height ,
+      height:height,
       width: width,
       child: ElevatedButton(
         onPressed: onPressed,
@@ -33,7 +33,7 @@ class KButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style:buttonTextStyle.copyWith(color: foregroundColor)
+          style:buttonTextStyle1.copyWith(color: foregroundColor)
         ),
       ),
     );

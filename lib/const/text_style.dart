@@ -16,7 +16,7 @@ final headlineW700F20Dark =
 GoogleFonts.urbanist(fontSize: 20.sp, fontWeight: FontWeight.w700,color:buttonBackground);
 
 final headlineW700F20Light =
-GoogleFonts.urbanist(fontSize: 20.sp, fontWeight: FontWeight.w700,color:secondaryBackground2);
+GoogleFonts.urbanist(fontSize: 20.sp, fontWeight: FontWeight.w700,color:secondaryBackgroundWhite2);
 
 
 final headlineW700F18Dark =
@@ -65,7 +65,11 @@ final bodyTextW400F11Light = GoogleFonts.urbanist(
 final bodyTextW700F11Dark =
 GoogleFonts.urbanist(fontSize: 11.sp, fontWeight: FontWeight.w700);
 
+final bodyTextW700F12Dark =
+GoogleFonts.urbanist(fontSize: 12.sp, fontWeight: FontWeight.w700);
 
+final bodyTextW700F12Light =
+GoogleFonts.urbanist(fontSize: 12.sp, fontWeight: FontWeight.w700,color:const Color(0XFFAAAAAA));
 
 final bodyTextW700F14Dark =
     GoogleFonts.urbanist(fontSize: 14.sp, fontWeight: FontWeight.w700);
@@ -78,5 +82,7 @@ final bodyTextW700F14Light = GoogleFonts.urbanist(
 final bodyTextW700F20Dark =
 GoogleFonts.urbanist(fontSize: 20.sp, fontWeight: FontWeight.w700);
 
-final buttonTextStyle = GoogleFonts.urbanist(
+final buttonTextStyle2 = GoogleFonts.urbanist(
+    fontSize: 14.sp, fontWeight: FontWeight.w700, color: buttonBackground);
+final buttonTextStyle1 = GoogleFonts.urbanist(
     fontSize: 14.sp, fontWeight: FontWeight.w700, color: Colors.white);

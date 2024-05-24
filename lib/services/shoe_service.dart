@@ -134,6 +134,10 @@ class ShoesService {
         query = query.where('price', isGreaterThanOrEqualTo: minPrice);
       }
 
+      if (brand != null) {
+        query = query.where('brand', isEqualTo: brand);
+      }
+
       if (maxPrice != null) {
         query = query.where('price', isLessThanOrEqualTo: maxPrice);
       }
@@ -143,7 +147,6 @@ class ShoesService {
       }
 
       if (colors != null && colors.isNotEmpty) {
-        print('Has color');
         for (var color in colors) {
           query = query.where('colors', arrayContains: color);
         }

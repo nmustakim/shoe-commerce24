@@ -24,7 +24,7 @@ class ShoeCard extends StatelessWidget {
             child: Stack(
               children: [
                 Card(
-                  color: secondaryBackground1,
+                  color: secondaryBackgroundWhite1,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(22.r),
                   ),

@@ -19,7 +19,7 @@ class ShoeCardShimmer extends StatelessWidget {
             height: 160.h,
             width: 160.w,
             child: Card(
-              color: secondaryBackground1,
+              color: secondaryBackgroundWhite1,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(22.r),
               ),
@@ -34,7 +34,7 @@ class ShoeCardShimmer extends StatelessWidget {
             color: Colors.grey[300],
           ),
           SizedBox(
-            height: 11.h,
+            height: 10.h,
           ),
           Row(
             children: [

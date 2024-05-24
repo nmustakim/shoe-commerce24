@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/global_widgets/k_appbar.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
 import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
 
-import '../const/color.dart';
-import '../const/img_asset.dart';
-import '../const/text_style.dart';
-import '../providers/shoes_provider.dart';
+import '../../const/color.dart';
+import '../../const/img_asset.dart';
+import '../../const/text_style.dart';
+import '../../providers/shoes_provider.dart';
 
 class FilterScreen extends StatefulWidget {
   final String selectedBrand;
 
   const FilterScreen({super.key, required this.selectedBrand});
 
-
   @override
   FilterScreenState createState() => FilterScreenState();
-
 }
-
 
 class FilterScreenState extends State<FilterScreen> {
   @override
@@ -32,7 +29,7 @@ class FilterScreenState extends State<FilterScreen> {
   }
 
   double _minPrice = 200;
-  double _maxPrice = 300;
+  double _maxPrice = 750;
   String _selectedBrand = '';
   String _sortBy = '';
   String _gender = '';
@@ -61,38 +58,7 @@ class FilterScreenState extends State<FilterScreen> {
             SizedBox(height: 34.h),
             Text('Price Range', style: headlineW600F16),
             SizedBox(height: 20.h),
-
-            FlutterSlider(
-              trackBar: FlutterSliderTrackBar(
-                activeTrackBar: BoxDecoration(color: buttonBackground),
-                inactiveTrackBar: BoxDecoration(color: secondaryBackground3),
-              ),
-              values: [_minPrice, _maxPrice],
-              min: 0,
-              max: 1750,
-              rangeSlider: true,
-              onDragging: (handlerIndex, lowerValue, upperValue) {
-                setState(() {
-                  _minPrice = lowerValue;
-                  _maxPrice = upperValue;
-                });
-              },
-              handler: FlutterSliderHandler(
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                ),
-                child: Image.asset(ImageAsset.thumb),
-              ),
-              rightHandler: FlutterSliderHandler(
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-
-                ),
-                child: Image.asset(ImageAsset.thumb),
-              ),
-            ),
-
-
+            _buildPriceSlider(),
             SizedBox(height: 34.h),
             Text('Sort By', style: headlineW600F16),
             SizedBox(height: 20.h),
@@ -109,6 +75,71 @@ class FilterScreenState extends State<FilterScreen> {
         ),
       ),
       bottomNavigationBar: _buildBottomAppBar(filterCount),
+    );
+  }
+
+  Widget _buildPriceSlider() {
+    return Stack(
+      children: [
+        FlutterSlider(
+          tooltip: FlutterSliderTooltip(
+              format: (String value) {
+                final doubleValue = double.tryParse(value) ?? 0;
+                return '\$${doubleValue.toInt()}';
+              },
+              boxStyle: const FlutterSliderTooltipBox(
+                  foregroundDecoration:
+                      BoxDecoration(color: Colors.transparent)),
+              alwaysShowTooltip: true,
+              textStyle: bodyTextW700F12Dark,
+              positionOffset: FlutterSliderTooltipPositionOffset(top: 45.h)),
+          trackBar: FlutterSliderTrackBar(
+            activeTrackBar: BoxDecoration(color: buttonBackground),
+            inactiveTrackBar: BoxDecoration(color: secondaryBackgroundWhite3),
+          ),
+          values: [_minPrice, _maxPrice],
+          min: 0,
+          max: 1750,
+          rangeSlider: true,
+          onDragging: (handlerIndex, lowerValue, upperValue) {
+            setState(() {
+              _minPrice = lowerValue;
+              _maxPrice = upperValue;
+            });
+          },
+          handler: FlutterSliderHandler(
+            decoration: const BoxDecoration(
+              color: Colors.transparent,
+            ),
+            child: SvgPicture.asset(ImageAsset.thumb),
+          ),
+          rightHandler: FlutterSliderHandler(
+            decoration: const BoxDecoration(
+              color: Colors.transparent,
+            ),
+            child: SvgPicture.asset(ImageAsset.thumb),
+          ),
+        ),
+        Positioned(
+          left: 8.w,
+          right: 0,
+          top: 52.h,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '\$0',
+                style: bodyTextW700F12Light,
+              ),
+              Text(
+                '\$1750',
+                style: bodyTextW700F12Light,
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -129,14 +160,16 @@ class FilterScreenState extends State<FilterScreen> {
             backgroundColor: primary,
             foregroundColor: buttonBackground,
             onPressed: () {
-              setState(() {
-                _minPrice = 0;
-                _maxPrice = 750;
-                _selectedBrand = '';
-                _sortBy = '';
-                _gender = '';
-                _colors = [];
-              });
+              if(filterCount != 0) {
+                setState(() {
+                  _minPrice = 200;
+                  _maxPrice = 750;
+                  _selectedBrand = '';
+                  _sortBy = '';
+                  _gender = '';
+                  _colors = [];
+                });
+              }
             },
             height: 50.h,
             width: 150.w),
@@ -173,7 +206,7 @@ class FilterScreenState extends State<FilterScreen> {
   }
 
   List<Widget> _buildBrandButtons() {
-    List<String> brands = ['Nike', 'Jordan', 'Adidas', 'Reebok'];
+    List<String> brands = ['Nike', 'Puma', 'Adidas', 'Reebok'];
     return brands.map((brand) {
       return GestureDetector(
         onTap: () {
@@ -189,10 +222,10 @@ class FilterScreenState extends State<FilterScreen> {
                   width: 50.w,
                   height: 50.h,
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: secondaryBackground3),
+                      shape: BoxShape.circle, color: secondaryBackgroundWhite3),
                   child: Center(
-                    child: Image.asset(
-                      'assets/images/$brand.png',
+                    child: SvgPicture.asset(
+                      'assets/images/$brand.svg',
                     ),
                   ),
                 ),
@@ -201,7 +234,7 @@ class FilterScreenState extends State<FilterScreen> {
                       bottom: 0,
                       right: 0,
                       top: 28.h,
-                      child: Image.asset('assets/images/check_round.png'))
+                      child: SvgPicture.asset(ImageAsset.tickCircle))
               ],
             ),
             SizedBox(
@@ -282,7 +315,7 @@ class FilterScreenState extends State<FilterScreen> {
                 side: BorderSide(
                     color: _colors.contains(color)
                         ? buttonBackground
-                        : secondaryBackground1)),
+                        : secondaryBackgroundWhite1)),
             label: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -321,9 +354,7 @@ class FilterScreenState extends State<FilterScreen> {
     if (_selectedBrand.isNotEmpty) count++;
     if (_sortBy.isNotEmpty) count++;
     if (_gender.isNotEmpty) count++;
-    count +=
-        _colors.length - 1; // Subtract 1 to exclude the empty string in _colors
+        count += _colors.length;
     return count;
   }
-
 }

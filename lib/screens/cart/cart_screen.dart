@@ -16,35 +16,32 @@ class ShoppingCartScreen extends StatelessWidget {
     final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: const KAppBar(hasTitle: true, title: 'Cart'),
-      body: Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Consumer<CartProvider>(
-          builder: (context, cartProvider, child) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: cartProvider.items.length,
-                    itemBuilder: (context, index) {
-                      final cartItem = cartProvider.items[index];
-                      return CartItemWidget(
-                        cartItem: cartItem,
-                        onRemove: () {
-                          cartProvider.decrementQuantity(cartItem);
-                        },
-                        onAdd: () {
-                          cartProvider.addToCart(cartItem.copyWith(quantity: 1));
-                        },
-                      );
-                    },
-                  ),
+      body: Consumer<CartProvider>(
+        builder: (context, cartProvider, child) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: cartProvider.items.length,
+                  itemBuilder: (context, index) {
+                    final cartItem = cartProvider.items[index];
+                    return CartItemWidget(
+                      cartItem: cartItem,
+                      onRemove: () {
+                        cartProvider.decrementQuantity(cartItem);
+                      },
+                      onAdd: () {
+                        cartProvider.addToCart(cartItem.copyWith(quantity: 1));
+                      },
+                    );
+                  },
                 ),
+              ),
 
-              ],
-            );
-          },
-        ),
+            ],
+          );
+        },
       ),
       bottomNavigationBar: BottomAppBar(
         color:  primary,

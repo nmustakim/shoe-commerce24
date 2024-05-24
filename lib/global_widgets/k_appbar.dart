@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shoe_commerce/const/img_asset.dart';
 import 'package:shoe_commerce/global_widgets/k_star-filled.dart';
 
@@ -53,9 +54,9 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
                     )
                   : InkWell(
                       onTap: onTrailingTap,
-                      child: Image.asset(isDiscoverScreen == true
+                      child: SvgPicture.asset(isDiscoverScreen == true
                           ? ImageAsset.cart
-                          : ImageAsset.bag2))),
+                          : ImageAsset.bag2,fit: BoxFit.fill,))),
       ],
     );
   }

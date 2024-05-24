@@ -1,10 +1,11 @@
 import 'dart:ui';
 
-Color secondaryBackground1 = const Color(0XFFE7E7E7);
-Color secondaryBackground2 = const Color(0XFFB7B7B7);
+Color secondaryBackgroundWhite1 = const Color(0XFFE7E7E7);
+Color secondaryBackgroundWhite2 = const Color(0XFFB7B7B7);
 
-Color secondaryBackground3 = const Color(0XFFF3F3F3);
-Color secondaryBackground4 = const Color(0XFFD7D7D7);
+Color secondaryBackgroundWhite3 = const Color(0XFFF3F3F3);
+Color secondaryBackgroundWhite4 = const Color(0XFFD7D7D7);
+Color secondaryBackgroundRed = const Color(0XFFFF4C5E);
 Color borderLight = const Color(0XFF6F6F6F);
 
 

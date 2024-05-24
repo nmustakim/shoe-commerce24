@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../const/img_asset.dart';
 
@@ -16,7 +17,7 @@ class RatingStars extends StatelessWidget {
         (index) {
           return Container(
             margin: EdgeInsets.only(right: 4.w),
-            child: Image.asset(
+            child: SvgPicture.asset(
               index < rating ? ImageAsset.starFilled : ImageAsset.starBlank,
               height: 12.h,
               width: 12.w,

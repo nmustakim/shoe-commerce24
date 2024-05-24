@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../const/img_asset.dart';
 
@@ -10,7 +11,7 @@ class KStarBlank extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(right: 4.w),
-        child: Image.asset(
+        child: SvgPicture.asset(
           ImageAsset.starFilled,
           height: 12.h,
           width: 12.w,

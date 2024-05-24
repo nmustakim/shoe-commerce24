@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shoe_commerce/const/img_asset.dart';
 
 class KStarFilled extends StatelessWidget {
@@ -10,7 +11,7 @@ class KStarFilled extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(right: 4.w),
-        child: Image.asset(
+        child: SvgPicture.asset(
           ImageAsset.starFilled,
           height: isBigStar?20.h:12.h,
           width:isBigStar?20.w: 12.w,

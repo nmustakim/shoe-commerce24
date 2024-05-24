@@ -5,10 +5,9 @@ import '../models/shoe.dart';
 import '../services/shoe_service.dart';
 
 class ShoesProvider extends ChangeNotifier {
-
   final ShoesService _shoesService;
   List<Shoe> _shoes = [];
-  List<String> categories = ["All", "Nike", "Jordan", "Adidas", "Reebok"];
+  List<String> categories = ["All", "Nike", "Puma", "Adidas", "Reebok"];
   String _selectedBrand = "All";
   bool _isLoading = false;
 
@@ -18,7 +17,6 @@ class ShoesProvider extends ChangeNotifier {
   DocumentSnapshot? _lastBrandDocument;
   DocumentSnapshot? _lastShoeDocument;
   DocumentSnapshot? _lastFilteredShoeDocument;
-
 
   ShoesProvider(this._shoesService) {
     fetchShoes();
@@ -31,6 +29,27 @@ class ShoesProvider extends ChangeNotifier {
   String? get error => _error;
   int get selectedIndex => _selectedBrandIndex;
   String get selectedBrand => _selectedBrand;
+  Map<String, List<Shoe>> _shoesCache = {};
+  // Future<void> fetchShoes() async {
+  //   _isLoading = true;
+  //   _error = null;
+  //   notifyListeners();
+  //
+  //   try {
+  //     final category = categories[_selectedBrandIndex];
+  //     final result = category == "All"
+  //         ? await _shoesService.getShoes()
+  //         : await _shoesService.getBrandShoes(category);
+  //     _shoes = result.shoes;
+  //     _lastBrandDocument = result.lastBrandDocument;
+  //     _lastShoeDocument = result.lastShoeDocument;
+  //   } catch (e) {
+  //     _error = 'Error fetching shoes: $e';
+  //   } finally {
+  //     _isLoading = false;
+  //     notifyListeners();
+  //   }
+  // }
 
   Future<void> fetchShoes() async {
     _isLoading = true;
@@ -39,13 +58,20 @@ class ShoesProvider extends ChangeNotifier {
 
     try {
       final category = categories[_selectedBrandIndex];
-      final result = category == "All"
-          ? await _shoesService.getShoes()
-          : await _shoesService.getBrandShoes(category);
-      _shoes = result.shoes;
-      _lastBrandDocument = result.lastBrandDocument;
-      _lastShoeDocument = result.lastShoeDocument;
-
+      if (_shoesCache.containsKey(category)) {
+        // Use cached data if available
+        _shoes = _shoesCache[category]!;
+      } else {
+        // Fetch data if not available in cache
+        final result = category == "All"
+            ? await _shoesService.getShoes()
+            : await _shoesService.getBrandShoes(category);
+        _shoes = result.shoes;
+        _lastBrandDocument = result.lastBrandDocument;
+        _lastShoeDocument = result.lastShoeDocument;
+        // Cache fetched shoes
+        _shoesCache[category] = _shoes;
+      }
     } catch (e) {
       _error = 'Error fetching shoes: $e';
     } finally {
@@ -53,6 +79,7 @@ class ShoesProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
   Future<void> fetchMoreShoes() async {
     if (_isFetchingMore || _lastBrandDocument == null) return;
@@ -62,8 +89,10 @@ class ShoesProvider extends ChangeNotifier {
     try {
       final category = categories[_selectedBrandIndex];
       final result = category == "All"
-          ? await _shoesService.getMoreShoes(_lastBrandDocument!, _lastShoeDocument!)
-          : await _shoesService.getMoreBrandShoes(category, _lastBrandDocument!);
+          ? await _shoesService.getMoreShoes(
+              _lastBrandDocument!, _lastShoeDocument!)
+          : await _shoesService.getMoreBrandShoes(
+              category, _lastBrandDocument!);
       _shoes.addAll(result.shoes);
       _lastBrandDocument = result.lastBrandDocument;
       _lastShoeDocument = result.lastShoeDocument;
@@ -75,14 +104,13 @@ class ShoesProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchShoesByFilter({
-    String? brand,
-    double? minPrice,
-    double? maxPrice,
-    String? sortBy,
-    String? gender,
-    List<String>? colors
-  }) async {
+  Future<void> fetchShoesByFilter(
+      {String? brand,
+      double? minPrice,
+      double? maxPrice,
+      String? sortBy,
+      String? gender,
+      List<String>? colors}) async {
     _lastFilteredShoeDocument = null;
     _isLoading = true;
     _error = null;
@@ -100,7 +128,6 @@ class ShoesProvider extends ChangeNotifier {
       );
       _shoes = result.shoes;
       _lastFilteredShoeDocument = result.lastShoeDocument;
-
     } catch (e) {
       _error = 'Error fetching shoes by filter: $e';
     } finally {
@@ -110,17 +137,20 @@ class ShoesProvider extends ChangeNotifier {
     }
   }
 
+  void setSelectedBrand(int index, bool isFromDiscover) {
+    if(index == -1) {
+      _selectedBrandIndex = 0;
+      _selectedBrand = categories[0];
+    }
+    else{
+      _selectedBrandIndex = index;
+      _selectedBrand = categories[index];
 
-  void setSelectedBrand(int index,bool isFromDiscover) {
-    _selectedBrandIndex = index;
-    _selectedBrand = categories[index];
-    if(isFromDiscover){
-      fetchShoes();
-
+      if (isFromDiscover) {
+        fetchShoes();
+      }
     }
 
     notifyListeners();
   }
-
-
 }
