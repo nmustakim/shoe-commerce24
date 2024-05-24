@@ -29,7 +29,7 @@ class ShoesProvider extends ChangeNotifier {
   String? get error => _error;
   int get selectedIndex => _selectedBrandIndex;
   String get selectedBrand => _selectedBrand;
-  Map<String, List<Shoe>> _shoesCache = {};
+  final Map<String, List<Shoe>> _shoesCache = {};
   // Future<void> fetchShoes() async {
   //   _isLoading = true;
   //   _error = null;

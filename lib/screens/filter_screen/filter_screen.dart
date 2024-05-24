@@ -234,7 +234,7 @@ class FilterScreenState extends State<FilterScreen> {
                       bottom: 0,
                       right: 0,
                       top: 28.h,
-                      child: SvgPicture.asset(ImageAsset.tickCircle))
+                      child: SvgPicture.asset(ImageAsset.checkCircle))
               ],
             ),
             SizedBox(

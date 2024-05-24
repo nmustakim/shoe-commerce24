@@ -2,12 +2,10 @@ class ImageAsset {
   static String imagePath = 'assets/images';
   static String adidas = '$imagePath/Adidas.svg';
   static String add = '$imagePath/add-circle.svg';
-  static String remove = '$imagePath/minus-circle.svg';
-
+  static String remove = '$imagePath/remove.svg';
 
   static String bag2 = '$imagePath/bag-2.svg';
   static String cart = '$imagePath/cart.svg';
-  static String checkRound = '$imagePath/check_round.svg';
   static String check = '$imagePath/check.svg';
   static String filterIcon = '$imagePath/filter_button.svg';
   static String jordan = '$imagePath/Jordan.svg';
@@ -18,5 +16,7 @@ class ImageAsset {
   static String reebok = '$imagePath/Reebok.svg';
   static String starBlank = '$imagePath/star-blank.svg';
   static String starFilled = '$imagePath/star-filled.svg';
+  static String checkCircle = '$imagePath/check-circle.svg';
   static String tickCircle = '$imagePath/tick-circle.svg';
+
 }
