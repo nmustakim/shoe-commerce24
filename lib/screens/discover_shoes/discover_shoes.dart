@@ -159,7 +159,7 @@ class DiscoverShoesState extends State<DiscoverShoes> {
   Widget _buildShimmerGrid(int itemCount) {
     return GridView.builder(
       gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-        mainAxisSpacing: 16.h,
+        mainAxisSpacing: 8.h,
           crossAxisCount: 2, childAspectRatio: 0.66,),
       itemCount: itemCount,
       itemBuilder: (context, index) {

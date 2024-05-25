@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart'; // Import CachedNetworkImage package
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/text_style.dart';
@@ -42,7 +42,7 @@ class ShoeCard extends StatelessWidget {
                           child: Container(height:40.h,color: Colors.white),
                         ), // Placeholder widget
                         errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                             Icon(Icons.error,size:10.sp),
                       ),
                     ),
                   ),
@@ -55,7 +55,7 @@ class ShoeCard extends StatelessWidget {
                     placeholder: (context, url) =>
                         const CupertinoActivityIndicator(),
                     errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                         Icon(Icons.error,size: 10.sp,),
                   ),
                 )
               ],

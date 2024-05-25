@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -94,7 +95,12 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
             },
             itemCount: shoe.images.length,
             itemBuilder: (context, index) {
-              return Image.network(
+              return CachedNetworkImage(
+                placeholder: (context, url) =>
+                const CupertinoActivityIndicator(),
+                errorWidget: (context, url, error) =>
+                    Icon(Icons.error,size: 10.sp,),
+                imageUrl:
                 shoe.images[index],
                 width: 252.w,
                 fit: BoxFit.fitWidth,
