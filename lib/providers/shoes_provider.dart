@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../models/shoe.dart';
 import '../services/shoe_service.dart';
 
@@ -30,26 +31,7 @@ class ShoesProvider extends ChangeNotifier {
   int get selectedIndex => _selectedBrandIndex;
   String get selectedBrand => _selectedBrand;
   final Map<String, List<Shoe>> _shoesCache = {};
-  // Future<void> fetchShoes() async {
-  //   _isLoading = true;
-  //   _error = null;
-  //   notifyListeners();
-  //
-  //   try {
-  //     final category = categories[_selectedBrandIndex];
-  //     final result = category == "All"
-  //         ? await _shoesService.getShoes()
-  //         : await _shoesService.getBrandShoes(category);
-  //     _shoes = result.shoes;
-  //     _lastBrandDocument = result.lastBrandDocument;
-  //     _lastShoeDocument = result.lastShoeDocument;
-  //   } catch (e) {
-  //     _error = 'Error fetching shoes: $e';
-  //   } finally {
-  //     _isLoading = false;
-  //     notifyListeners();
-  //   }
-  // }
+
 
   Future<void> fetchShoes() async {
     _isLoading = true;
@@ -74,6 +56,8 @@ class ShoesProvider extends ChangeNotifier {
       }
     } catch (e) {
       _error = 'Error fetching shoes: $e';
+      showToast(_error!);
+
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -98,6 +82,8 @@ class ShoesProvider extends ChangeNotifier {
       _lastShoeDocument = result.lastShoeDocument;
     } catch (e) {
       _error = 'Error fetching more shoes: $e';
+      showToast(_error!);
+
     } finally {
       _isFetchingMore = false;
       notifyListeners();
@@ -118,7 +104,14 @@ class ShoesProvider extends ChangeNotifier {
 
     try {
       final result = await _shoesService.getShoesByFilter(
-        brand: brand,
+
+        /*Since the "All" brand is initially selected and passed from the discover screen,
+        so if users don't select any brand in the filter screen, the selected brand remains the same.
+         So we don't need it to be in the search filter query
+
+         */
+
+        brand: brand == 'All'?null:brand,
         minPrice: minPrice,
         maxPrice: maxPrice,
         sortBy: sortBy,
@@ -130,6 +123,7 @@ class ShoesProvider extends ChangeNotifier {
       _lastFilteredShoeDocument = result.lastShoeDocument;
     } catch (e) {
       _error = 'Error fetching shoes by filter: $e';
+      showToast(_error!);
     } finally {
       _isLoading = false;
 
@@ -146,6 +140,7 @@ class ShoesProvider extends ChangeNotifier {
       _selectedBrandIndex = index;
       _selectedBrand = categories[index];
 
+
       if (isFromDiscover) {
         fetchShoes();
       }
@@ -153,4 +148,11 @@ class ShoesProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+}
+void showToast(String message) {
+  Fluttertoast.showToast(
+    msg: message,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.CENTER,
+  );
 }

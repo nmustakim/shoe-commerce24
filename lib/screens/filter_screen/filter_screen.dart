@@ -187,6 +187,7 @@ class FilterScreenState extends State<FilterScreen> {
                         gender: _gender,
                         colors: _colors,
                       );
+
                       shoesProvider.setSelectedBrand(
                           shoesProvider.categories.indexOf(_selectedBrand),
                           false);
@@ -255,7 +256,7 @@ class FilterScreenState extends State<FilterScreen> {
   }
 
   SingleChildScrollView _buildSortButtons() {
-    List<String> sortOptions = ['Most recent', 'Lowest price', 'Highest price'];
+    List<String> sortOptions = ['Most recent', 'Lowest price', 'Highest review'];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Wrap(

@@ -158,8 +158,8 @@ class ShoesService {
           query = query.orderBy('date', descending: true);
         } else if (sortBy == 'Lowest price') {
           query = query.orderBy('price', descending: false);
-        } else if (sortBy == 'Highest price') {
-          query = query.orderBy('price', descending: true);
+        } else if (sortBy == 'Highest review') {
+          query = query.orderBy('avg_rating', descending: true);
         }
       }
 
