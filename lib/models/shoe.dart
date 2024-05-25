@@ -13,6 +13,7 @@ class Shoe {
   final List<String> images;
   final List<String> colors;
   final List<double> sizes;
+  final DateTime date;
 
   Shoe({
     required this.id,
@@ -27,6 +28,7 @@ class Shoe {
     required this.images,
     required this.colors,
     required this.sizes,
+    required this.date,
   });
 
   factory Shoe.fromDocument(DocumentSnapshot doc) {
@@ -46,6 +48,7 @@ class Shoe {
           (data['sizes'] ?? []).map((size) => size.toDouble())),
       description: data['description'] ?? '',
       brand: data['brand'] ?? '',
+      date: (data['date'] as Timestamp).toDate(),
     );
   }
 }

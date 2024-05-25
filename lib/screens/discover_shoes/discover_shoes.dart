@@ -9,7 +9,7 @@ import 'package:shoe_commerce/global_widgets/k_appbar.dart';
 import 'package:shoe_commerce/routes.dart';
 import 'package:shoe_commerce/screens/discover_shoes/shimmer_card.dart';
 import 'package:shoe_commerce/screens/discover_shoes/widgets/shoe_card.dart';
-import 'package:shoe_commerce/screens/product_details/priduct_details_screen.dart';
+import '../../helper/navigation_helper.dart';
 import '../../models/shoe.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/shoes_provider.dart';
@@ -50,16 +50,15 @@ class DiscoverShoesState extends State<DiscoverShoes> {
     final shoesProvider = Provider.of<ShoesProvider>(context);
 
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: Colors.white,
       appBar: KAppBar(
         isDiscoverScreen: true,
         hasTitle: true,
         title: 'Discover',
         hasTrailing: true,
-        onTrailingTap:  () => NavigationService.navigateToNamedRoute(AppRoutes.cartScreen),
-
-    ),
+        onTrailingTap: () => NavigationHelper.navigateToCartScreen(context),
+      ),
       body: Consumer<ShoesProvider>(
         builder: (context, shoesProvider, child) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0.w),
@@ -82,10 +81,13 @@ class DiscoverShoesState extends State<DiscoverShoes> {
                         : GridView.builder(
                             controller: _scrollController,
                             gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.7111111111,
-                            ),
+                                 SliverGridDelegateWithFixedCrossAxisCount(
+                                   mainAxisSpacing: 16.h,
+                                    crossAxisCount: 2, childAspectRatio: 0.66,
+                                  crossAxisSpacing: 8.h
+
+
+                                ),
                             itemCount: shoesProvider.shoes.length,
                             itemBuilder: (context, index) {
                               final Shoe shoe = shoesProvider.shoes[index];
@@ -94,13 +96,8 @@ class DiscoverShoesState extends State<DiscoverShoes> {
                                   Provider.of<ReviewProvider>(context,
                                           listen: false)
                                       .fetchTop3Reviews(shoe.id);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ProductDetailsScreen(shoe: shoe),
-                                    ),
-                                  );
+                                  NavigationHelper.navigateToProductDetails(
+                                      context, shoe);
                                 },
                                 shoe: shoesProvider.shoes[index],
                               );
@@ -113,10 +110,7 @@ class DiscoverShoesState extends State<DiscoverShoes> {
           ),
         ),
       ),
-      floatingActionButton: Container(
-        margin: const EdgeInsets.only(top:18.0),
-        child: _buildFloatingActionButton(context, shoesProvider),
-      ),
+      floatingActionButton: _buildFloatingActionButton(context, shoesProvider),
     );
   }
 
@@ -153,15 +147,12 @@ class DiscoverShoesState extends State<DiscoverShoes> {
       BuildContext context, ShoesProvider shoesProvider) {
     return InkWell(
       onTap: () => NavigationService.navigateToNamedRoute(
-      AppRoutes.filterScreen,
-      arguments: {'selectedBrand': shoesProvider.selectedBrand},),
-      child:
-          SvgPicture.asset(
-            ImageAsset.filterIcon,
-            fit: BoxFit.cover,
-          ),
-
-
+        AppRoutes.filterScreen,
+        arguments: {'selectedBrand': shoesProvider.selectedBrand},
+      ),
+      child: SvgPicture.asset(
+        ImageAsset.filterIcon,
+      ),
     );
   }
 

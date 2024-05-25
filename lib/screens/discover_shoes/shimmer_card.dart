@@ -16,8 +16,8 @@ class ShoeCardShimmer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 160.h,
-            width: 160.w,
+            height: 150.h,
+            width: 150.w,
             child: Card(
               color: secondaryBackgroundWhite1,
               shape: RoundedRectangleBorder(

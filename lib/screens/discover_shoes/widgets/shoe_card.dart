@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shoe_commerce/const/color.dart';
@@ -18,9 +19,8 @@ class ShoeCard extends StatelessWidget {
       onTap: onTap,
       child: Column(
         children: [
-          SizedBox(
-            height: 160.h,
-            width: 160.w,
+          AspectRatio(
+            aspectRatio: 1,
             child: Stack(
               children: [
                 Card(
@@ -40,13 +40,13 @@ class ShoeCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                    padding: EdgeInsets.only(left: 20.w, top: 16.h),
+                    padding: EdgeInsets.only(left: 24.w, top: 24.h),
                     child: Image.network(shoe.logo))
               ],
             ),
           ),
           SizedBox(
-            height: 8.h,
+            height: 16.h,
           ),
           Container(
             margin: EdgeInsets.only(left: 8.w),
@@ -62,7 +62,7 @@ class ShoeCard extends StatelessWidget {
             margin: EdgeInsets.only(left: 6.w),
             child: Row(
               children: [
-        const KStarFilled(),
+                const KStarFilled(),
                 Text.rich(
                   TextSpan(
                     children: [
@@ -85,8 +85,7 @@ class ShoeCard extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.only(left: 8.w),
               child: Text('\$${shoe.price.toStringAsFixed(2)}',
-                  style: bodyTextW400F12Dark.copyWith(
-                      fontWeight: FontWeight.w700)),
+                  style: bodyTextW700F14Dark),
             ),
           ),
         ],

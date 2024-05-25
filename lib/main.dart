@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/providers/cart_provider.dart';
+import 'package:shoe_commerce/providers/filter_selection_provider.dart';
 import 'package:shoe_commerce/providers/order_provider.dart';
 import 'package:shoe_commerce/providers/review_provider.dart';
 import 'package:shoe_commerce/providers/shoes_provider.dart';
@@ -33,7 +34,10 @@ Future<void> main() async {
                 OrderProvider()),
         ChangeNotifierProvider(
             create: (BuildContext context) =>
-                ReviewProvider())
+                ReviewProvider()),
+        ChangeNotifierProvider(
+            create: (BuildContext context) =>
+                FilterProvider())
     ],
       child: const ShoeCommerce()),
   );
@@ -47,7 +51,7 @@ class ShoeCommerce extends StatelessWidget {
     return ScreenUtilInit(
         designSize: const Size(375, 872),
         minTextAdapt: true,
-        builder: (_, child) {
+        builder: (context, child) {
           return  MaterialApp(
 
             navigatorKey: NavigationService.navigatorKey,

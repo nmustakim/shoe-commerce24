@@ -7,20 +7,21 @@ import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/img_asset.dart';
 import 'package:shoe_commerce/global_widgets/k_bottom_bar.dart';
 import 'package:shoe_commerce/global_widgets/k_appbar.dart';
+import 'package:shoe_commerce/global_widgets/k_remove_button.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
 import 'package:shoe_commerce/models/cart_item.dart';
-import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
 import 'package:shoe_commerce/screens/product_details/widgets/rating_stars.dart';
-import 'package:shoe_commerce/screens/reviews/review_screen.dart';
 import 'package:shoe_commerce/screens/reviews/widget/review_shimmer.dart';
 import 'package:shoe_commerce/screens/reviews/widget/review_widget.dart';
 import 'package:shoe_commerce/util/color_util.dart';
 import 'package:shoe_commerce/util/string_util.dart';
 import '../../const/text_style.dart';
+import '../../global_widgets/k_add_button.dart';
+import '../../helper/navigation_helper.dart';
 import '../../models/shoe.dart';
 import '../../providers/cart_provider.dart';
 import '../../providers/review_provider.dart';
-import '../cart/cart_screen.dart';
+import '../../services/navigation_service.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Shoe shoe;
@@ -44,10 +45,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Scaffold(
       appBar: KAppBar(
           hasTrailing: true,
-          onTrailingTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ShoppingCartScreen()))),
+          onTrailingTap: () => NavigationHelper.navigateToCartScreen(context)),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0.w),
@@ -73,7 +71,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
           color: primary,
           child: KBottomBar(
               labelText: 'Price',
-              valueText: widget.shoe.price.toStringAsFixed(2),
+              valueText: '\$${widget.shoe.price.toStringAsFixed(2)}',
               buttonText: 'ADD TO CART',
               onButtonPressed: () => _showAddToCartPopup(context))),
     );
@@ -137,10 +135,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
           children: [
             RatingStars(rating: shoe.averageRating),
             _horizontalSpacing(5),
-            Text(
-              shoe.averageRating.toString(),
-              style: bodyTextW700F11Dark
-            ),
+            Text(shoe.averageRating.toString(), style: bodyTextW700F11Dark),
             _horizontalSpacing(5),
             Text(
               '(${shoe.reviewCount} Reviews)',
@@ -190,7 +185,6 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       height: 2.4.h,
                       width: 9.04.w,
                       fit: BoxFit.scaleDown,
-
                     ),
                   )
                 else
@@ -230,7 +224,6 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: Container(
                 height: 40.h,
                 width: 40.h,
-
                 decoration: BoxDecoration(
                   color: isSelected ? buttonBackground : primary,
                   shape: BoxShape.circle,
@@ -301,7 +294,9 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
       child: Consumer<ReviewProvider>(builder: (_, reviewProvider, child) {
         return OutlinedButton(
           style: OutlinedButton.styleFrom(
-            foregroundColor:  reviewProvider.isLoading?secondaryBackgroundWhite2:buttonBackground,
+            foregroundColor: reviewProvider.isLoading
+                ? secondaryBackgroundWhite2
+                : buttonBackground,
             shape: RoundedRectangleBorder(
               side: BorderSide(color: secondaryBackgroundWhite1),
               borderRadius: BorderRadius.circular(100.r),
@@ -310,22 +305,20 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
           onPressed: reviewProvider.isLoading
               ? () {}
               : () async {
-                  await reviewProvider
-                      .fetchReviews(widget.shoe.id)
-                      .then((value) => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ReviewScreen(
-                                    shoe: widget.shoe,
-                                  ))));
+                  await reviewProvider.fetchReviews(widget.shoe.id).then(
+                        (value) => NavigationHelper.navigateToReviewScreen(
+                            context, widget.shoe),
+                      );
                 },
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if(reviewProvider.isLoading)
-                Container(margin:EdgeInsets.only(right: 24.w),child: const CupertinoActivityIndicator()),
+              if (reviewProvider.isLoading)
+                Container(
+                    margin: EdgeInsets.only(right: 24.w),
+                    child: const CupertinoActivityIndicator()),
               Text(
-                reviewProvider.isLoading?'Loading...':'SEE ALL REVIEW',
+                reviewProvider.isLoading ? 'Loading...' : 'SEE ALL REVIEW',
                 style: bodyTextW700F14Dark,
               ),
             ],
@@ -354,9 +347,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     children: [
                       Text('Add to Cart', style: bodyTextW700F20Dark),
                       IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
+                          onPressed: () =>NavigationService.popNavigate(),
                           icon: const Icon(Icons.close))
                     ],
                   ),
@@ -401,19 +392,15 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          IconButton(
-                            icon: Icon(Icons.remove_circle_outline,
-                                color: secondaryBackgroundWhite2, size: 24.sp),
-                            onPressed: () {
-                              if (selectedQuantity > 1) {
-                                selectedQuantity--;
-                                (context as Element).markNeedsBuild();
-                              }
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.add_circle_outline, size: 24.sp),
-                            onPressed: () {
+                          KRemoveButton(onRemove: () {
+                            if (selectedQuantity > 1) {
+                              selectedQuantity--;
+                              (context as Element).markNeedsBuild();
+                            }
+                          }),
+                          _horizontalSpacing(16.w),
+                          KAddButton(
+                            onAdd: () {
                               selectedQuantity++;
                               (context as Element).markNeedsBuild();
                             },
@@ -441,7 +428,7 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 shoe.colors[_selectedColorIndex]),
                             price: shoe.price,
                             quantity: selectedQuantity));
-                        Navigator.pop(context);
+                        NavigationService.popNavigate();
                         _showAddedToCartPopup(context, selectedQuantity);
                       })
                 ],
@@ -479,12 +466,8 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     children: [
                       KButton(
                         text: 'BACK EXPLORE',
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const DiscoverShoes()));
-                        },
+                        onPressed: () =>
+                            NavigationHelper.navigateToDiscoverShoes(context),
                         foregroundColor: buttonBackground,
                         backgroundColor: primary,
                         height: 52.h,
@@ -493,13 +476,9 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       KButton(
                         text: 'TO CART',
                         onPressed: () {
-                          Navigator.pop(context);
+                          NavigationService.popNavigate();
 
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ShoppingCartScreen()));
+                          NavigationHelper.navigateToCartScreen(context);
                         },
                         height: 52.h,
                         width: 156.w,

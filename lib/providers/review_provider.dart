@@ -16,8 +16,8 @@ class ReviewProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  bool _isFetching3 = false;
-  bool get isFetchingTop => _isFetching3;
+  bool _isFetchingTopReviews = false;
+  bool get isFetchingTop => _isFetchingTopReviews;
   Future<void> fetchReviews(String shoeId) async {
     _isLoading = true;
     notifyListeners();
@@ -55,7 +55,7 @@ class ReviewProvider with ChangeNotifier {
 
 
   Future<void> fetchTop3Reviews(String shoeId) async {
-    _isFetching3 = true;
+    _isFetchingTopReviews = true;
     notifyListeners();
 
     try {
@@ -66,7 +66,7 @@ class ReviewProvider with ChangeNotifier {
       debugPrint('Error fetching top 3 reviews: $e');
       _topReviews = [];
     } finally {
-      _isFetching3 = false;
+      _isFetchingTopReviews = false;
       notifyListeners();
     }
   }

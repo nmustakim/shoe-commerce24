@@ -5,12 +5,13 @@ import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:provider/provider.dart';
 import 'package:shoe_commerce/global_widgets/k_appbar.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
-import 'package:shoe_commerce/screens/discover_shoes/discover_shoes.dart';
+import 'package:shoe_commerce/providers/shoes_provider.dart';
 
 import '../../const/color.dart';
 import '../../const/img_asset.dart';
 import '../../const/text_style.dart';
-import '../../providers/shoes_provider.dart';
+import '../../helper/navigation_helper.dart';
+import '../../providers/filter_selection_provider.dart';
 
 class FilterScreen extends StatefulWidget {
   final String selectedBrand;
@@ -25,11 +26,31 @@ class FilterScreenState extends State<FilterScreen> {
   @override
   void initState() {
     super.initState();
-    _selectedBrand = widget.selectedBrand;
+    FilterProvider filterProvider =
+        Provider.of<FilterProvider>(context, listen: false);
+
+    _minPrice = filterProvider.minPrice??0;
+    _maxPrice = filterProvider.maxPrice??0;
+    _selectedBrand = widget.selectedBrand ;
+    _sortBy = filterProvider.sortBy;
+    _gender = filterProvider.gender;
+    _colors = List<String>.from(filterProvider.colors);
   }
 
-  double _minPrice = 200;
-  double _maxPrice = 750;
+  void _resetFilters() {
+    Provider.of<FilterProvider>(context, listen: false).resetFilters();
+    setState(() {
+      _minPrice = 0;
+      _maxPrice = 0;
+      _selectedBrand = '';
+      _sortBy = '';
+      _gender = '';
+      _colors = [];
+    });
+  }
+
+  double _minPrice = 0;
+  double _maxPrice = 0;
   String _selectedBrand = '';
   String _sortBy = '';
   String _gender = '';
@@ -156,52 +177,47 @@ class FilterScreenState extends State<FilterScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         KButton(
-            text: 'RESET ($filterCount)',
-            backgroundColor: primary,
-            foregroundColor: buttonBackground,
-            onPressed: () {
-              if(filterCount != 0) {
-                setState(() {
-                  _minPrice = 200;
-                  _maxPrice = 750;
-                  _selectedBrand = '';
-                  _sortBy = '';
-                  _gender = '';
-                  _colors = [];
-                });
-              }
-            },
-            height: 50.h,
-            width: 150.w),
-        Consumer<ShoesProvider>(builder: (_, shoesProvider, child) {
-          return KButton(
-              text: shoesProvider.isLoading ? 'Applying...' : 'APPLY',
-              onPressed: shoesProvider.isLoading
-                  ? () {}
-                  : () {
-                      shoesProvider.fetchShoesByFilter(
-                        brand: _selectedBrand,
-                        minPrice: _minPrice,
-                        maxPrice: _maxPrice,
-                        sortBy: _sortBy,
-                        gender: _gender,
-                        colors: _colors,
-                      );
+          text: 'RESET ($filterCount)',
+          backgroundColor: primary,
+          foregroundColor: buttonBackground,
+          onPressed: () {
+            _resetFilters();
 
-                      shoesProvider.setSelectedBrand(
-                          shoesProvider.categories.indexOf(_selectedBrand),
-                          false);
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const DiscoverShoes()),
-                        );
-                      });
-                    },
-              height: 50.h,
-              width: 150.h);
-        })
+
+          },
+          height: 50.h,
+          width: 150.w,
+        ),
+        KButton(
+          text: 'APPLY',
+          onPressed: () {
+
+            Provider.of<FilterProvider>(context, listen: false).updateFilters(
+              minPrice: _minPrice==0?null:_minPrice,
+              maxPrice: _maxPrice==0?null:_maxPrice,
+              selectedBrand: _selectedBrand,
+              sortBy: _sortBy,
+              gender: _gender,
+              colors: _colors,
+            );
+            var shoesProvider =
+                Provider.of<ShoesProvider>(context, listen: false);
+            shoesProvider.setSelectedBrand(
+                shoesProvider.categories.indexOf(_selectedBrand), false);
+            shoesProvider.fetchShoesByFilter(
+              brand: _selectedBrand,
+              minPrice: _minPrice==0?null:_minPrice,
+              maxPrice: _maxPrice==0?null:_maxPrice,
+              sortBy: _sortBy,
+              gender: _gender,
+              colors: _colors,
+            );
+            print(_sortBy);
+            NavigationHelper.navigateToDiscoverShoes(context);
+          },
+          height: 50.h,
+          width: 150.h,
+        ),
       ],
     );
   }
@@ -256,7 +272,11 @@ class FilterScreenState extends State<FilterScreen> {
   }
 
   SingleChildScrollView _buildSortButtons() {
-    List<String> sortOptions = ['Most recent', 'Lowest price', 'Highest review'];
+    List<String> sortOptions = [
+      'Most recent',
+      'Lowest price',
+      'Highest review'
+    ];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Wrap(
@@ -305,7 +325,7 @@ class FilterScreenState extends State<FilterScreen> {
   }
 
   Wrap _buildColorButtons() {
-    List<String> colors = ['Black', 'White', 'Red'];
+    List<String> colors = ['Black', 'Grey', 'Red'];
     return Wrap(
         spacing: 12.w,
         children: colors.map((color) {
@@ -322,11 +342,14 @@ class FilterScreenState extends State<FilterScreen> {
               children: [
                 CircleAvatar(
                   radius: 8.r,
-                  backgroundColor: color == 'Black'
-                      ? Colors.black
-                      : color == 'White'
-                          ? Colors.white
-                          : Colors.red,
+               backgroundColor: color == 'Black'
+                ? Colors.black
+                    : color == 'Grey'
+                ? Colors.grey
+                    : color == 'Red'
+                ? Colors.red
+                    : Colors.green,
+
                 ),
                 SizedBox(
                   width: 8.w,
@@ -351,11 +374,11 @@ class FilterScreenState extends State<FilterScreen> {
 
   int calculateFilterCount() {
     int count = 0;
-    if (_minPrice != 200 || _maxPrice != 750) count++;
-    if (_selectedBrand.isNotEmpty) count++;
+    if (_minPrice != 0 || _maxPrice != 0) count++;
+    if (_selectedBrand.isNotEmpty && _selectedBrand !=  "All") count++;
     if (_sortBy.isNotEmpty) count++;
     if (_gender.isNotEmpty) count++;
-        count += _colors.length;
+    count += _colors.length;
     return count;
   }
 }

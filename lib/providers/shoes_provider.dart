@@ -32,7 +32,6 @@ class ShoesProvider extends ChangeNotifier {
   String get selectedBrand => _selectedBrand;
   final Map<String, List<Shoe>> _shoesCache = {};
 
-
   Future<void> fetchShoes() async {
     _isLoading = true;
     _error = null;
@@ -57,13 +56,11 @@ class ShoesProvider extends ChangeNotifier {
     } catch (e) {
       _error = 'Error fetching shoes: $e';
       showToast(_error!);
-
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
-
 
   Future<void> fetchMoreShoes() async {
     if (_isFetchingMore || _lastBrandDocument == null) return;
@@ -83,7 +80,6 @@ class ShoesProvider extends ChangeNotifier {
     } catch (e) {
       _error = 'Error fetching more shoes: $e';
       showToast(_error!);
-
     } finally {
       _isFetchingMore = false;
       notifyListeners();
@@ -103,15 +99,18 @@ class ShoesProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      setSelectedBrand(brand != null ? categories.indexOf(brand) : 0, false);
+      if(brand =="All" && minPrice == 0 && maxPrice == 0 && gender == null && sortBy == null && colors == null){
+        fetchShoes();
+      }
       final result = await _shoesService.getShoesByFilter(
 
         /*Since the "All" brand is initially selected and passed from the discover screen,
         so if users don't select any brand in the filter screen, the selected brand remains the same.
          So we don't need it to be in the search filter query
-
          */
 
-        brand: brand == 'All'?null:brand,
+        brand: brand == "All" ? null : brand,
         minPrice: minPrice,
         maxPrice: maxPrice,
         sortBy: sortBy,
@@ -132,14 +131,12 @@ class ShoesProvider extends ChangeNotifier {
   }
 
   void setSelectedBrand(int index, bool isFromDiscover) {
-    if(index == -1) {
+    if (index == -1) {
       _selectedBrandIndex = 0;
       _selectedBrand = categories[0];
-    }
-    else{
+    } else {
       _selectedBrandIndex = index;
       _selectedBrand = categories[index];
-
 
       if (isFromDiscover) {
         fetchShoes();
@@ -149,6 +146,7 @@ class ShoesProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+
 void showToast(String message) {
   Fluttertoast.showToast(
     msg: message,

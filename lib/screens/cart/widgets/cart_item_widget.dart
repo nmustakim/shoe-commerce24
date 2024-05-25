@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/img_asset.dart';
 import 'package:shoe_commerce/const/text_style.dart';
+import 'package:shoe_commerce/global_widgets/k_add_button.dart';
+import 'package:shoe_commerce/global_widgets/k_remove_button.dart';
 import 'package:shoe_commerce/global_widgets/kbutton.dart';
 import 'package:shoe_commerce/models/cart_item.dart';
 import 'package:shoe_commerce/providers/cart_provider.dart';
@@ -26,8 +28,9 @@ class CartItemWidget extends StatelessWidget {
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
-
-      background: Container(alignment:Alignment.centerRight,child: SvgPicture.asset(ImageAsset.deleteIcon)),
+      background: Container(
+          alignment: Alignment.centerRight,
+          child: SvgPicture.asset(ImageAsset.deleteIcon)),
       confirmDismiss: (direction) async {
         return await showDialog(
           context: context,
@@ -59,7 +62,7 @@ class CartItemWidget extends StatelessWidget {
             .removeFromCart(cartItem);
       },
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 16.w),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.w),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -100,9 +103,7 @@ class CartItemWidget extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            InkWell(
-                                onTap: onRemove,
-                                child: SvgPicture.asset(ImageAsset.remove,height:24.w ,width: 24.w,)),
+                            KRemoveButton(onRemove: onRemove),
                             SizedBox(
                               width: 24.w,
                               child: Center(
@@ -112,9 +113,7 @@ class CartItemWidget extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            InkWell(
-                              onTap: onAdd,
-                                child: SvgPicture.asset(ImageAsset.add,height:24.w ,width: 24.w,)),
+                            KAddButton(onAdd: onAdd),
 
                           ],
                         ),
