@@ -1,6 +1,8 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // Import CachedNetworkImage package
+import 'package:shimmer/shimmer.dart';
 import 'package:shoe_commerce/const/color.dart';
 import 'package:shoe_commerce/const/text_style.dart';
 import 'package:shoe_commerce/global_widgets/k_star-filled.dart';
@@ -31,17 +33,31 @@ class ShoeCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                        margin: EdgeInsets.only(bottom: 8.h),
-                        child: Image.network(
-                          shoe.images.first,
-                          width: 120.w,
-                          fit: BoxFit.fitWidth,
-                        )),
+                      margin: EdgeInsets.only(bottom: 8.h),
+                      child: CachedNetworkImage(
+                        imageUrl: shoe.images.first,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(color: Colors.white),
+                        ), // Placeholder widget
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
+                    ),
                   ),
                 ),
                 Container(
-                    padding: EdgeInsets.only(left: 24.w, top: 24.h),
-                    child: Image.network(shoe.logo))
+                  padding: EdgeInsets.only(left: 24.w, top: 30.h),
+                  child: CachedNetworkImage(
+                    // Use CachedNetworkImage widget
+                    imageUrl: shoe.logo,
+                    placeholder: (context, url) =>
+                        const CupertinoActivityIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                )
               ],
             ),
           ),

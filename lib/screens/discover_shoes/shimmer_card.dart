@@ -9,55 +9,63 @@ class ShoeCardShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 150.h,
-            width: 150.w,
-            child: Card(
-              color: secondaryBackgroundWhite1,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(22.r),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4.w),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Card(
+                color: secondaryBackgroundWhite1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(22.r),
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 8.h,
-          ),
-          Container(
-            width: 160.w,
-            height: 12.h,
-            color: Colors.grey[300],
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          Row(
-            children: [
-              Container(
-                width: 40.w,
-                height: 12.h,
-                color: Colors.grey[300],
+            SizedBox(
+              height: 16.h,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 4.w),
+              width: 150.w,
+              height: 12.h,
+              color: Colors.grey[300],
+            ),
+            SizedBox(
+              height: 12.h,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 4.w),
+              child: Row(
+                children: [
+                  Container(
+                    width: 40.w,
+                    height: 12.h,
+                    color: Colors.grey[300],
+                  ),
+                  SizedBox(width: 4.w),
+                  Container(
+                    width: 100.w,
+                    height: 12.h,
+                    color: Colors.grey[300],
+                  ),
+                ],
               ),
-              SizedBox(width: 4.w),
-              Container(
-                width: 100.w,
-                height: 12.h,
-                color: Colors.grey[300],
-              ),
-            ],
-          ),
-          SizedBox(height: 4.h),
-          Container(
-            width: 60.w,
-            height: 12.h,
-            color: Colors.grey[300],
-          ),
-        ],
+            ),
+            SizedBox(height: 6.h),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 4.w),
+              width: 60.w,
+              height: 12.h,
+              color: Colors.grey[300],
+            ),
+            SizedBox(height: 16.h,)
+          ],
+        ),
       ),
     );
   }
