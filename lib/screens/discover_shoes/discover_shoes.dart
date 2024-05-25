@@ -53,6 +53,7 @@ class DiscoverShoesState extends State<DiscoverShoes> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: Colors.white,
       appBar: KAppBar(
+
         isDiscoverScreen: true,
         hasTitle: true,
         title: 'Discover',

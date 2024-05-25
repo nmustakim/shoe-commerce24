@@ -28,6 +28,7 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading:isDiscoverScreen == true?false:true ,
       toolbarHeight: 80.h,
       centerTitle: isDiscoverScreen == true ? false : true,
       title: hasTitle == true

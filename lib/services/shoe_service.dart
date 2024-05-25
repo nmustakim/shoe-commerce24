@@ -163,8 +163,6 @@ class ShoesService {
         query = query.where('price', isLessThanOrEqualTo: maxPrice);
       }
 
-
-
       if (lastShoeDocument != null) {
         query = query.startAfterDocument(lastShoeDocument);
       }
@@ -175,16 +173,15 @@ class ShoesService {
       shoes.addAll(snapshot.docs.map((doc) => Shoe.fromDocument(doc)).toList());
     }
 
-      if (sortBy != null) {
-        if (sortBy == 'Most recent') {
-          shoes.sort((a, b) => b.date.compareTo(a.date));
-        } else if (sortBy == 'Lowest price') {
-          shoes.sort((a, b) => a.price.compareTo(b.price));
-        } else if (sortBy == 'Highest review') {
-          shoes.sort((a, b) => b.averageRating.compareTo(a.averageRating));
-        }
+    if (sortBy != null) {
+      if (sortBy == 'Most recent') {
+        shoes.sort((a, b) => b.date.compareTo(a.date));
+      } else if (sortBy == 'Lowest price') {
+        shoes.sort((a, b) => a.price.compareTo(b.price));
+      } else if (sortBy == 'Highest review') {
+        shoes.sort((a, b) => b.averageRating.compareTo(a.averageRating));
       }
-
+    }
 
     // Get the last shoe document for pagination
     DocumentSnapshot? newLastShoeDocument = shoes.isNotEmpty

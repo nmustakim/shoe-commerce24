@@ -6,7 +6,10 @@ class StringUtil {
     if (input.isEmpty) return input;
     return input[0].toUpperCase() + input.substring(1);
   }
-
+  static String convertFirstLetterSmall(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toLowerCase() + input.substring(1);
+  }
   static String formatSize(double size, int index) {
     return size.toStringAsFixed(index % 2 == 0 ? 0 : 1);
   }

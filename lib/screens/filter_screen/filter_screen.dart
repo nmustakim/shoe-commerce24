@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -212,7 +213,9 @@ class FilterScreenState extends State<FilterScreen> {
               gender: _gender,
               colors: _colors,
             );
-            print(_sortBy);
+            if (kDebugMode) {
+              print(_sortBy);
+            }
             NavigationHelper.navigateToDiscoverShoes(context);
           },
           height: 50.h,

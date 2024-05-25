@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -73,8 +75,14 @@ class CartItemWidget extends StatelessWidget {
                 color: secondaryBackgroundWhite1,
                 borderRadius: BorderRadius.circular(20.r),
               ),
-              child: Image.network(cartItem.image),
-            ),
+              child:CachedNetworkImage(
+                // Use CachedNetworkImage widget
+                imageUrl: cartItem.image,
+                placeholder: (context, url) =>
+                const CupertinoActivityIndicator(),
+                errorWidget: (context, url, error) =>
+                    Icon(Icons.error,size: 10.sp,),
+            )),
             SizedBox(width: 16.w),
             Expanded(
               child: Column(
