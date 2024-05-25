@@ -21,9 +21,8 @@ class ShoesService {
     }
   }
 
-  Future<ShoesResult> getShoes(
-      {DocumentSnapshot? lastBrandDocument,
-      DocumentSnapshot? lastShoeDocument}) async {
+  Future<ShoesResult> getShoes({DocumentSnapshot? lastBrandDocument,
+    DocumentSnapshot? lastShoeDocument}) async {
     List<Shoe> shoes = [];
     QuerySnapshot brandSnapshot;
 
@@ -45,12 +44,12 @@ class ShoesService {
 
     if (lastShoeDocument == null) {
       shoeSnapshot =
-          await brandDoc.reference.collection('shoes').limit(10).get();
+      await brandDoc.reference.collection('shoes').limit(6).get();
     } else {
       shoeSnapshot = await brandDoc.reference
           .collection('shoes')
           .startAfterDocument(lastShoeDocument)
-          .limit(10)
+          .limit(6)
           .get();
     }
 
@@ -59,7 +58,7 @@ class ShoesService {
 
     DocumentSnapshot? newLastBrandDocument = brandDoc;
     DocumentSnapshot? newLastShoeDocument =
-        shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
+    shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
 
     while (shoes.length < 6 && newLastBrandDocument != null) {
       QuerySnapshot nextBrandSnapshot = await _brandsCollection
@@ -71,12 +70,12 @@ class ShoesService {
         newLastShoeDocument = null;
         shoeSnapshot = await newLastBrandDocument.reference
             .collection('shoes')
-            .limit(10 - shoes.length)
+            .limit(6 - shoes.length)
             .get();
         shoes.addAll(
             shoeSnapshot.docs.map((doc) => Shoe.fromDocument(doc)).toList());
         newLastShoeDocument =
-            shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
+        shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
       } else {
         newLastBrandDocument = null;
       }
@@ -108,7 +107,7 @@ class ShoesService {
           .doc(brandId)
           .collection('shoes')
           .startAfterDocument(lastShoeDocument)
-          .limit(10)
+          .limit(6)
           .get();
     }
 
@@ -116,13 +115,13 @@ class ShoesService {
         shoeSnapshot.docs.map((doc) => Shoe.fromDocument(doc)).toList());
 
     DocumentSnapshot? newLastShoeDocument =
-        shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
+    shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
 
     return ShoesResult(shoes, null, newLastShoeDocument);
   }
 
-  Future<ShoesResult> getMoreBrandShoes(
-      String brandId, DocumentSnapshot lastShoeDocument) async {
+  Future<ShoesResult> getMoreBrandShoes(String brandId,
+      DocumentSnapshot lastShoeDocument) async {
     return await getBrandShoes(brandId, lastShoeDocument: lastShoeDocument);
   }
 
@@ -186,16 +185,16 @@ class ShoesService {
     // Get the last shoe document for pagination
     DocumentSnapshot? newLastShoeDocument = shoes.isNotEmpty
         ? await _brandsCollection
-            .doc(shoes.last.brand)
-            .collection('shoes')
-            .doc(shoes.last.id)
-            .get()
+        .doc(shoes.last.brand)
+        .collection('shoes')
+        .doc(shoes.last.id)
+        .get()
         : null;
 
     return ShoesResult(shoes, null, newLastShoeDocument);
   }
-}
 
+}
 class ShoesResult {
   final List<Shoe> shoes;
   final DocumentSnapshot? lastBrandDocument;
