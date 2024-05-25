@@ -84,7 +84,7 @@ class DiscoverShoesState extends State<DiscoverShoes> {
                                  SliverGridDelegateWithFixedCrossAxisCount(
                                    mainAxisSpacing: 16.h,
                                     crossAxisCount: 2, childAspectRatio: 0.66,
-                                  crossAxisSpacing: 8.h
+                                  crossAxisSpacing: 8.w
 
 
                                 ),
@@ -158,8 +158,9 @@ class DiscoverShoesState extends State<DiscoverShoes> {
 
   Widget _buildShimmerGrid(int itemCount) {
     return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, childAspectRatio: 0.71111),
+      gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+        mainAxisSpacing: 16.h,
+          crossAxisCount: 2, childAspectRatio: 0.66,),
       itemCount: itemCount,
       itemBuilder: (context, index) {
         return const ShoeCardShimmer();

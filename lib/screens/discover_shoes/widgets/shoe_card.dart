@@ -39,7 +39,7 @@ class ShoeCard extends StatelessWidget {
                         placeholder: (context, url) => Shimmer.fromColors(
                           baseColor: Colors.grey[300]!,
                           highlightColor: Colors.grey[100]!,
-                          child: Container(color: Colors.white),
+                          child: Container(height:40.h,color: Colors.white),
                         ), // Placeholder widget
                         errorWidget: (context, url, error) =>
                             const Icon(Icons.error),
@@ -48,7 +48,7 @@ class ShoeCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 24.w, top: 30.h),
+                  margin: EdgeInsets.only(left: 24.w, top: 30.h),
                   child: CachedNetworkImage(
                     // Use CachedNetworkImage widget
                     imageUrl: shoe.logo,
