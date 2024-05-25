@@ -128,6 +128,8 @@ Pagination: Implemented pagination to limit the amount of data fetched at a time
 
 Caching Mechanism: Utilized a caching mechanism to store previously fetched data locally, reducing the need for repeated network requests.
 
+Review by rating: Added the feature to see the review by stars.
+
 Cached Network Image and shimmer effect: Implemented the use of cached network images and shimmer to display placeholders while actual images are being loaded,
 providing an overview to the users before the actual data displays.
 I have a plan to make it a complete feature rich app in the future.
