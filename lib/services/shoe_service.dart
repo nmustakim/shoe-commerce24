@@ -21,8 +21,9 @@ class ShoesService {
     }
   }
 
-  Future<ShoesResult> getShoes({DocumentSnapshot? lastBrandDocument,
-    DocumentSnapshot? lastShoeDocument}) async {
+  Future<ShoesResult> getShoes(
+      {DocumentSnapshot? lastBrandDocument,
+      DocumentSnapshot? lastShoeDocument}) async {
     List<Shoe> shoes = [];
     QuerySnapshot brandSnapshot;
 
@@ -44,7 +45,7 @@ class ShoesService {
 
     if (lastShoeDocument == null) {
       shoeSnapshot =
-      await brandDoc.reference.collection('shoes').limit(10).get();
+          await brandDoc.reference.collection('shoes').limit(10).get();
     } else {
       shoeSnapshot = await brandDoc.reference
           .collection('shoes')
@@ -58,7 +59,7 @@ class ShoesService {
 
     DocumentSnapshot? newLastBrandDocument = brandDoc;
     DocumentSnapshot? newLastShoeDocument =
-    shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
+        shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
 
     while (shoes.length < 6 && newLastBrandDocument != null) {
       QuerySnapshot nextBrandSnapshot = await _brandsCollection
@@ -75,7 +76,7 @@ class ShoesService {
         shoes.addAll(
             shoeSnapshot.docs.map((doc) => Shoe.fromDocument(doc)).toList());
         newLastShoeDocument =
-        shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
+            shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
       } else {
         newLastBrandDocument = null;
       }
@@ -115,13 +116,13 @@ class ShoesService {
         shoeSnapshot.docs.map((doc) => Shoe.fromDocument(doc)).toList());
 
     DocumentSnapshot? newLastShoeDocument =
-    shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
+        shoeSnapshot.docs.isNotEmpty ? shoeSnapshot.docs.last : null;
 
     return ShoesResult(shoes, null, newLastShoeDocument);
   }
 
-  Future<ShoesResult> getMoreBrandShoes(String brandId,
-      DocumentSnapshot lastShoeDocument) async {
+  Future<ShoesResult> getMoreBrandShoes(
+      String brandId, DocumentSnapshot lastShoeDocument) async {
     return await getBrandShoes(brandId, lastShoeDocument: lastShoeDocument);
   }
 
@@ -154,10 +155,15 @@ class ShoesService {
       if (minPrice != null) {
         query = query.where('price', isGreaterThanOrEqualTo: minPrice);
       }
+      if (brand != 'All') {
+        query = query.where('brand', isEqualTo: brand);
+      }
 
       if (maxPrice != null) {
         query = query.where('price', isLessThanOrEqualTo: maxPrice);
       }
+
+
 
       if (lastShoeDocument != null) {
         query = query.startAfterDocument(lastShoeDocument);
@@ -169,24 +175,24 @@ class ShoesService {
       shoes.addAll(snapshot.docs.map((doc) => Shoe.fromDocument(doc)).toList());
     }
 
-    // Sort the combined list of shoes according to the sorting criteria
-    if (sortBy != null) {
-      if (sortBy == 'Most recent') {
-        shoes.sort((a, b) => b.date.compareTo(a.date));
-      } else if (sortBy == 'Lowest price') {
-        shoes.sort((a, b) => a.price.compareTo(b.price));
-      } else if (sortBy == 'Highest review') {
-        shoes.sort((a, b) => b.averageRating.compareTo(a.averageRating));
+      if (sortBy != null) {
+        if (sortBy == 'Most recent') {
+          shoes.sort((a, b) => b.date.compareTo(a.date));
+        } else if (sortBy == 'Lowest price') {
+          shoes.sort((a, b) => a.price.compareTo(b.price));
+        } else if (sortBy == 'Highest review') {
+          shoes.sort((a, b) => b.averageRating.compareTo(a.averageRating));
+        }
       }
-    }
+
 
     // Get the last shoe document for pagination
     DocumentSnapshot? newLastShoeDocument = shoes.isNotEmpty
         ? await _brandsCollection
-        .doc(shoes.last.brand)
-        .collection('shoes')
-        .doc(shoes.last.id)
-        .get()
+            .doc(shoes.last.brand)
+            .collection('shoes')
+            .doc(shoes.last.id)
+            .get()
         : null;
 
     return ShoesResult(shoes, null, newLastShoeDocument);

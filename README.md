@@ -15,7 +15,7 @@ A simple mobile application for selling shoes on both Android & iOS platforms.
 - **Limiting Data Fetch at a Time**: Limited the amount of data fetched at a time, perhaps through pagination.
 - **Responsive UI**: Created a responsive user interface adaptable to various screen sizes and orientations using screen util.
 - **Efficient State Management Solution**: Utilized an efficient state management solution, such as Provider or Riverpod, to manage states and update UI accordingly.
-- **Code Reusability and Modularity**: Structured the codebase for reusability and modularity.
+- **Code Re-usability and Modularity**: Structured the codebase for reusability and modularity.
 - **Error Handling**: Implemented robust error handling mechanisms to manage unexpected errors and provide informative feedback to users.
 
 ## Challenges Faced and Solutions
