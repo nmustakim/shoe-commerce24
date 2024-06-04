@@ -145,7 +145,7 @@ class ShoesProvider extends ChangeNotifier {
       _selectedBrand = categories[index];
 
       if (isFromDiscover) {
-        fetchShoes();
+        fetchShoesByFilter(brand: _selectedBrand, );
       }
     }
 

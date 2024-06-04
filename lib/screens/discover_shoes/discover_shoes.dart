@@ -6,9 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/img_asset.dart';
 import 'package:shoe_commerce/const/text_style.dart';
 import 'package:shoe_commerce/global_widgets/k_appbar.dart';
+import 'package:shoe_commerce/providers/filter_selection_provider.dart';
 import 'package:shoe_commerce/routes.dart';
 import 'package:shoe_commerce/screens/discover_shoes/shimmer_card.dart';
 import 'package:shoe_commerce/screens/discover_shoes/widgets/shoe_card.dart';
+import '../../const/color.dart';
 import '../../helper/navigation_helper.dart';
 import '../../models/shoe.dart';
 import '../../providers/review_provider.dart';
@@ -50,10 +52,9 @@ class DiscoverShoesState extends State<DiscoverShoes> {
     final shoesProvider = Provider.of<ShoesProvider>(context);
 
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: Colors.white,
       appBar: KAppBar(
-
         isDiscoverScreen: true,
         hasTitle: true,
         title: 'Discover',
@@ -82,13 +83,11 @@ class DiscoverShoesState extends State<DiscoverShoes> {
                         : GridView.builder(
                             controller: _scrollController,
                             gridDelegate:
-                                 SliverGridDelegateWithFixedCrossAxisCount(
-                                   mainAxisSpacing: 16.h,
-                                    crossAxisCount: 2, childAspectRatio: 0.66,
-                                  crossAxisSpacing: 8.w
-
-
-                                ),
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    mainAxisSpacing: 16.h,
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 0.66,
+                                    crossAxisSpacing: 8.w),
                             itemCount: shoesProvider.shoes.length,
                             itemBuilder: (context, index) {
                               final Shoe shoe = shoesProvider.shoes[index];
@@ -124,7 +123,6 @@ class DiscoverShoesState extends State<DiscoverShoes> {
           bool isSelected = index == shoesProvider.selectedIndex;
           return GestureDetector(
             onTap: () {
-
               shoesProvider.setSelectedBrand(index, true);
             },
             child: Row(
@@ -147,22 +145,41 @@ class DiscoverShoesState extends State<DiscoverShoes> {
 
   Widget _buildFloatingActionButton(
       BuildContext context, ShoesProvider shoesProvider) {
-    return InkWell(
-      onTap: () => NavigationService.navigateToNamedRoute(
-        AppRoutes.filterScreen,
-        arguments: {'selectedBrand': shoesProvider.selectedBrand},
-      ),
-      child: SvgPicture.asset(
-        ImageAsset.filterIcon,
-      ),
+    bool isFiltered =
+        Provider.of<FilterProvider>(context).calculateFilterCount() > 0;
+    return SizedBox(
+      height: 40.h,
+      width: 119.w,
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: buttonBackground),
+          onPressed: () {
+            NavigationService.navigateToNamedRoute(
+              AppRoutes.filterScreen,
+              arguments: {'selectedBrand': shoesProvider.selectedBrand},
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SvgPicture.asset(
+                  isFiltered ? ImageAsset.ellipse : ImageAsset.settings),
+
+              Text(
+                'FILTER',
+                style: buttonTextStyle1,
+              )
+            ],
+          )),
     );
   }
 
   Widget _buildShimmerGrid(int itemCount) {
     return GridView.builder(
-      gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         mainAxisSpacing: 8.h,
-          crossAxisCount: 2, childAspectRatio: 0.66,),
+        crossAxisCount: 2,
+        childAspectRatio: 0.66,
+      ),
       itemCount: itemCount,
       itemBuilder: (context, index) {
         return const ShoeCardShimmer();

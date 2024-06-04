@@ -7,7 +7,9 @@ class ImageAsset {
   static String bag2 = '$imagePath/bag-2.svg';
   static String cart = '$imagePath/cart.svg';
   static String check = '$imagePath/check.svg';
-  static String filterIcon = '$imagePath/filter_button.svg';
+  static String settings = '$imagePath/settings.svg';
+  static String ellipse = '$imagePath/ellipse.svg';
+
   static String jordan = '$imagePath/Jordan.svg';
   static String thumb = '$imagePath/thumb.svg';
   static String deleteIcon = '$imagePath/trash.svg';

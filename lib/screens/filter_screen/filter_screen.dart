@@ -30,8 +30,8 @@ class FilterScreenState extends State<FilterScreen> {
     FilterProvider filterProvider =
         Provider.of<FilterProvider>(context, listen: false);
 
-    _minPrice = filterProvider.minPrice ?? 0;
-    _maxPrice = filterProvider.maxPrice ?? 0;
+    _minPrice = filterProvider.minPrice ?? 100;
+    _maxPrice = filterProvider.maxPrice ?? 700;
     _selectedBrand = widget.selectedBrand;
     _sortBy = filterProvider.sortBy;
     _gender = filterProvider.gender;
@@ -41,8 +41,8 @@ class FilterScreenState extends State<FilterScreen> {
   void _resetFilters() {
     Provider.of<FilterProvider>(context, listen: false).resetFilters();
     setState(() {
-      _minPrice = 0;
-      _maxPrice = 0;
+      _minPrice = 200;
+      _maxPrice = 700;
       _selectedBrand = '';
       _sortBy = '';
       _gender = '';

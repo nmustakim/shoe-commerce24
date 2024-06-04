@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class FilterProvider extends ChangeNotifier {
-  double? minPrice =0;
-  double? maxPrice=0;
+  double? minPrice =200;
+  double? maxPrice=700;
   String selectedBrand = '';
   String sortBy = '';
   String gender = '';
@@ -67,8 +67,8 @@ class FilterProvider extends ChangeNotifier {
   }
 
   void resetFilters() {
-    minPrice = 0;
-    maxPrice = 0;
+    minPrice = 100;
+    maxPrice = 700;
     selectedBrand = '';
     sortBy = '';
     gender = '';

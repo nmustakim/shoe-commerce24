@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shoe_commerce/const/img_asset.dart';
 import 'package:shoe_commerce/global_widgets/k_star-filled.dart';
+import 'package:shoe_commerce/providers/cart_provider.dart';
 
 import '../const/text_style.dart';
 
@@ -27,6 +29,7 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isCartEmpty = Provider.of<CartProvider>(context).items.isNotEmpty;
     return AppBar(
       automaticallyImplyLeading:isDiscoverScreen == true?false:true ,
       toolbarHeight: 80.h,
@@ -55,7 +58,7 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
                     )
                   : InkWell(
                       onTap: onTrailingTap,
-                      child: SvgPicture.asset(isDiscoverScreen == true
+                      child: SvgPicture.asset(isCartEmpty == true
                           ? ImageAsset.cart
                           : ImageAsset.bag2,fit: BoxFit.fill,))),
       ],
