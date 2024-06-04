@@ -1,6 +1,8 @@
 # Shoe Commerce
 
 A simple mobile application for selling shoes on both Android & iOS platforms.
+<img width="1134" alt="Screenshot 2024-05-28 at 11 49 49 PM" src="https://github.com/nmustakim/shoe-commerce24/assets/98794936/b89bce3a-ec19-429b-9ef3-de564d7bea39">
+
 
 ## Project Setup Instructions
 
