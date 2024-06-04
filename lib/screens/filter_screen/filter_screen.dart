@@ -30,9 +30,9 @@ class FilterScreenState extends State<FilterScreen> {
     FilterProvider filterProvider =
         Provider.of<FilterProvider>(context, listen: false);
 
-    _minPrice = filterProvider.minPrice??0;
-    _maxPrice = filterProvider.maxPrice??0;
-    _selectedBrand = widget.selectedBrand ;
+    _minPrice = filterProvider.minPrice ?? 0;
+    _maxPrice = filterProvider.maxPrice ?? 0;
+    _selectedBrand = widget.selectedBrand;
     _sortBy = filterProvider.sortBy;
     _gender = filterProvider.gender;
     _colors = List<String>.from(filterProvider.colors);
@@ -183,8 +183,6 @@ class FilterScreenState extends State<FilterScreen> {
           foregroundColor: buttonBackground,
           onPressed: () {
             _resetFilters();
-
-
           },
           height: 50.h,
           width: 150.w,
@@ -192,10 +190,9 @@ class FilterScreenState extends State<FilterScreen> {
         KButton(
           text: 'APPLY',
           onPressed: () {
-
             Provider.of<FilterProvider>(context, listen: false).updateFilters(
-              minPrice: _minPrice==0?null:_minPrice,
-              maxPrice: _maxPrice==0?null:_maxPrice,
+              minPrice: _minPrice == 0 ? null : _minPrice,
+              maxPrice: _maxPrice == 0 ? null : _maxPrice,
               selectedBrand: _selectedBrand,
               sortBy: _sortBy,
               gender: _gender,
@@ -207,8 +204,8 @@ class FilterScreenState extends State<FilterScreen> {
                 shoesProvider.categories.indexOf(_selectedBrand), false);
             shoesProvider.fetchShoesByFilter(
               brand: _selectedBrand,
-              minPrice: _minPrice==0?null:_minPrice,
-              maxPrice: _maxPrice==0?null:_maxPrice,
+              minPrice: _minPrice == 0 ? null : _minPrice,
+              maxPrice: _maxPrice == 0 ? null : _maxPrice,
               sortBy: _sortBy,
               gender: _gender,
               colors: _colors,
@@ -345,14 +342,13 @@ class FilterScreenState extends State<FilterScreen> {
               children: [
                 CircleAvatar(
                   radius: 8.r,
-               backgroundColor: color == 'Black'
-                ? Colors.black
-                    : color == 'Grey'
-                ? Colors.grey
-                    : color == 'Red'
-                ? Colors.red
-                    : Colors.green,
-
+                  backgroundColor: color == 'Black'
+                      ? Colors.black
+                      : color == 'Grey'
+                          ? Colors.grey
+                          : color == 'Red'
+                              ? Colors.red
+                              : Colors.green,
                 ),
                 SizedBox(
                   width: 8.w,
@@ -378,7 +374,7 @@ class FilterScreenState extends State<FilterScreen> {
   int calculateFilterCount() {
     int count = 0;
     if (_minPrice != 0 || _maxPrice != 0) count++;
-    if (_selectedBrand.isNotEmpty && _selectedBrand !=  "All") count++;
+    if (_selectedBrand.isNotEmpty && _selectedBrand != "All") count++;
     if (_sortBy.isNotEmpty) count++;
     if (_gender.isNotEmpty) count++;
     count += _colors.length;

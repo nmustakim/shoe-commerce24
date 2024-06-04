@@ -141,8 +141,15 @@ class ShoesService {
 
     // Execute queries for each brand's shoes collection
     for (var brandDoc in brandSnapshot.docs) {
+      // Skip brands that do not match the filter
+      if (brand != null && brand != 'All' && brand != brandDoc.id) {
+        continue;
+      }
+
+      // Build the query for the current brand's shoes
       Query query = brandDoc.reference.collection('shoes');
 
+      // Apply filters
       if (gender != null && gender.isNotEmpty) {
         query = query.where('gender', isEqualTo: gender);
       }
@@ -153,9 +160,6 @@ class ShoesService {
 
       if (minPrice != null) {
         query = query.where('price', isGreaterThanOrEqualTo: minPrice);
-      }
-      if (brand != 'All') {
-        query = query.where('brand', isEqualTo: brand);
       }
 
       if (maxPrice != null) {
@@ -168,10 +172,17 @@ class ShoesService {
 
       query = query.limit(10);
 
+      // Fetch the shoes
       final snapshot = await query.get();
       shoes.addAll(snapshot.docs.map((doc) => Shoe.fromDocument(doc)).toList());
+
+      // Break if we have enough shoes
+      if (shoes.length >= 10) {
+        break;
+      }
     }
 
+    // Apply sorting after retrieval
     if (sortBy != null) {
       if (sortBy == 'Most recent') {
         shoes.sort((a, b) => b.date.compareTo(a.date));
@@ -193,7 +204,6 @@ class ShoesService {
 
     return ShoesResult(shoes, null, newLastShoeDocument);
   }
-
 }
 class ShoesResult {
   final List<Shoe> shoes;

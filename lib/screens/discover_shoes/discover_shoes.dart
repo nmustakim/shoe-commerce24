@@ -124,7 +124,7 @@ class DiscoverShoesState extends State<DiscoverShoes> {
           bool isSelected = index == shoesProvider.selectedIndex;
           return GestureDetector(
             onTap: () {
-              shoesProvider.fetchShoesByFilter(brand: category);
+
               shoesProvider.setSelectedBrand(index, true);
             },
             child: Row(

@@ -47,9 +47,13 @@ class ShoesProvider extends ChangeNotifier {
         final result = category == "All"
             ? await _shoesService.getShoes()
             : await _shoesService.getBrandShoes(category);
-        _shoes = result.shoes;
-        _lastBrandDocument = result.lastBrandDocument;
-        _lastShoeDocument = result.lastShoeDocument;
+
+          _shoes = result.shoes;
+        if(category=="All") {
+          _lastBrandDocument = result.lastBrandDocument;
+
+          _lastShoeDocument = result.lastShoeDocument;
+        }
         // Cache fetched shoes
         _shoesCache[category] = _shoes;
       }
@@ -75,8 +79,10 @@ class ShoesProvider extends ChangeNotifier {
           : await _shoesService.getMoreBrandShoes(
               category, _lastBrandDocument!);
       _shoes.addAll(result.shoes);
-      _lastBrandDocument = result.lastBrandDocument;
-      _lastShoeDocument = result.lastShoeDocument;
+      if(category =="All") {
+        _lastBrandDocument = result.lastBrandDocument;
+        _lastShoeDocument = result.lastShoeDocument;
+      }
     } catch (e) {
       _error = 'Error fetching more shoes: $e';
       showToast(_error!);
@@ -138,9 +144,9 @@ class ShoesProvider extends ChangeNotifier {
       _selectedBrandIndex = index;
       _selectedBrand = categories[index];
 
-      // if (isFromDiscover) {
-      //   fetchShoes();
-      // }
+      if (isFromDiscover) {
+        fetchShoes();
+      }
     }
 
     notifyListeners();
